@@ -1,0 +1,81 @@
+.night-study-page {
+  flex: 1;
+  width: 100%;
+  min-height: 100dvh;
+  padding:
+    calc(env(safe-area-inset-top) + 20px)
+    16px
+    calc(env(safe-area-inset-bottom) + 24px);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background:
+    radial-gradient(circle at top, rgba(59, 130, 246, 0.14), transparent 34%),
+    linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+}
+
+.night-study-page__hero {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.night-study-page__eyebrow {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #2563eb;
+}
+
+.night-study-page__title {
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.2;
+  letter-spacing: -0.04em;
+  color: #0f172a;
+}
+
+.night-study-page__description {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #475569;
+}
+
+.night-study-page__controls {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.night-study-page__card {
+  padding: 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(18px);
+}
+
+.night-study-page__field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.night-study-page__search {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  .night-study-page {
+    max-width: 480px;
+    margin: 0 auto;
+    padding-inline: 20px;
+  }
+}
