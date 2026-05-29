@@ -9,9 +9,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  background:
-    radial-gradient(circle at top, rgba(59, 130, 246, 0.14), transparent 34%),
-    linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+  background-color: var(--dds-color-background-surface);
 }
 
 .night-study-page__hero {
@@ -62,9 +60,13 @@
 }
 
 .night-study-page__field-group {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(8px, 2.4vw, 12px);
+}
+
+.night-study-page__field-group > * {
+  min-width: 0;
 }
 
 .night-study-page__search {

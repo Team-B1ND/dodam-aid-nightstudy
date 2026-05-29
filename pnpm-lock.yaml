@@ -14,9 +14,6 @@ importers:
       '@b1nd/dodam-design-system':
         specifier: ^1.0.11
         version: 1.0.11(@emotion/cache@11.14.0)(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.15)(react@19.2.6))(@types/react@19.2.15)(react@19.2.6))(framer-motion@12.40.0(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(zustand@5.0.13(@types/react@19.2.15)(react@19.2.6))
-      components:
-        specifier: link:@b1nd/dodam-design-system/components
-        version: link:@b1nd/dodam-design-system/components
       framer-motion:
         specifier: ^12.40.0
         version: 12.40.0(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
@@ -29,6 +26,12 @@ importers:
       styled-components:
         specifier: ^6.4.2
         version: 6.4.2(react-dom@19.2.6(react@19.2.6))(react-native@0.85.3(@babel/core@7.29.0)(@types/react@19.2.15)(react@19.2.6))(react@19.2.6)
+      themes:
+        specifier: link:@b1nd/dodam-design-system/themes
+        version: link:@b1nd/dodam-design-system/themes
+      typography:
+        specifier: link:@b1nd/dodam-design-system/typography
+        version: link:@b1nd/dodam-design-system/typography
       zod:
         specifier: ^4.4.3
         version: 4.4.3
@@ -323,7 +326,7 @@ packages:
   '@emotion/serialize@1.3.3':
     resolution: {integrity: sha512-EISGqt7sSNWHGI76hC7x1CksiXPahbxEOrC5RjmFRJTqLyEK9/9hZvBbiYn70dw4wuwMKiEMCUlR6ZXTSWQqxA==}
 
-@1.4.0':
+  '@emotion/sheet@1.4.0':
     resolution: {integrity: sha512-fTBW9/8r2w3dXWYM4HCB1Rdp8NLibOw2+XELH5m5+AkWiL/KqYX6dc0kKYlaYyKjrQ6ds33MCdMPEwgs2z1rqg==}
 
   '@emotion/styled@11.14.1':
