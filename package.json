@@ -12,10 +12,12 @@
   "dependencies": {
     "@b1nd/aid-kit": "^1.0.9",
     "@b1nd/dodam-design-system": "^1.0.11",
-"framer-motion": "^12.40.0",
+    "framer-motion": "^12.40.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "styled-components": "^6.4.2",
+    "themes": "link:@b1nd/dodam-design-system/themes",
+    "typography": "link:@b1nd/dodam-design-system/typography",
     "zod": "^4.4.3"
   },
   "devDependencies": {
