@@ -1,69 +1,88 @@
-import { SegmentedButton, type SegmentedButtonData, Dropdown, FilledTextField } from '@b1nd/dodam-design-system/components'
+import { SegmentedButton, type SegmentedButtonData, Dropdown, TextField } from '@b1nd/dodam-design-system/components'
 import { useState } from 'react'
+
 import './index.css'
 
+
 const NightStudyPage = () => {
+  // 일반/프심 세그먼트
   const [data, setData] = useState<SegmentedButtonData[]>([
     { text: "일반", isActive: true, value: "normal" },
     { text: "프로젝트", isActive: false, value: "project" },
   ]);
+  
+  // 학년 드롭다운 옵션
+  const [gradeSelected, setGradeSelected] = useState<string>("모든 학년");
 
-  const [selected, setSelected] = useState<string>("option1");
-  const items = [
-    { name: "Option 1", value: "option1" },
-    { name: "Option 2", value: "option2" },
-    { name: "Option 3", value: "option3" },
+  // 학반 드롭다운 옵션
+  const [classRoomSelected, setClassRoomSelected] = useState<string>("모든 학반");
+  
+  // 학년 드롭다운 케이스
+  const grade = [
+    { name: "모든 학년", value: "모든 학년" },
+    { name: "1학년", value: "1학년" },
+    { name: "2학년", value: "2학년" },
+    { name: "3학년", value: "3학년" },
   ];
+
+  // 학반 드롭다운 케이스
+  const classRoom = [
+    { name: "모든 학반", value: "모든 학반" },
+    { name: "1반", value: "1반" },
+    { name: "2반", value: "2반" },
+    { name: "3반", value: "3반" },
+    { name: "4반", value: "4반" },
+  ];
+  // 일반 심자 검색
+  const [searchNormalTerm, setSearchNormalTerm] = useState<string>("");
+  // 프젝 심자 검색
+  const [searchProjectTerm, setSearchProjectTerm] = useState<string>("");
+
 
   const activeType = data.find((item) => item.isActive)?.value ?? "normal";
 
+
   return (
     <main className="night-study-page">
-      <section className="night-study-page__hero">
-        <p className="night-study-page__eyebrow">DODAM AID</p>
-        <h1 className="night-study-page__title">심야 자습 관리</h1>
-        <p className="night-study-page__description">
-          모바일 웹뷰에서 바로 조작할 수 있도록 필요한 입력만 한 화면에 배치했습니다.
-        </p>
-      </section>
-
-      <section className="night-study-page__controls">
+      <h1 className="night-study-page__title">심야 자습 관리</h1>
         <SegmentedButton
           data={data}
           setData={setData}
           onBlockClick={(value) => {
             console.log(value)
           }}
-        />
-
-        <div className="night-study-page__card">
+          width='100%'
+          />
           <div className="night-study-page__field-group">
             <Dropdown
-              items={items}
-              value={selected}
-              onSelectedItemChange={(item) => setSelected(item.value)}
+              items={grade}
+              value={gradeSelected}
+              onSelectedItemChange={(item) => setGradeSelected(item.value)}
+              customStyle={{height: "50px"}}
             />
             <Dropdown
-              items={items}
-              value={selected}
-              onSelectedItemChange={(item) => setSelected(item.value)}
-            />
-            <Dropdown
-              items={items}
-              value={selected}
-              onSelectedItemChange={(item) => setSelected(item.value)}
+              items={classRoom}
+              value={classRoomSelected}
+              onSelectedItemChange={(item) => setClassRoomSelected(item.value)}
+              customStyle={{height: "50px"}}
             />
           </div>
 
           <div className="night-study-page__search">
-            <FilledTextField
+            <TextField
               type='text'
-              label=""
+              label=''
+              value={activeType === "normal" ? searchNormalTerm : searchProjectTerm}
               placeholder={activeType === "normal" ? "학생 검색" : "프로젝트 검색"}
+              onChange={(e) => {
+                if (activeType === "normal") {
+                  setSearchNormalTerm(e.target.value);
+                } else {
+                  setSearchProjectTerm(e.target.value);
+                }
+              }}
             />
-          </div>
-        </div>
-      </section>
+      </div>
     </main>
   );
 };
