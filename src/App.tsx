@@ -2,7 +2,7 @@ import { BridgeProvider } from "@b1nd/aid-kit/bridge-kit/web";
 import { SafeAreaProvider } from "@b1nd/aid-kit/safe-area-provider";
 import { AppStateProvider } from "@b1nd/aid-kit/app-state";
 import { RouteProvider, Router } from "@b1nd/aid-kit/navigation";
-import { OverlayProvider } from "@b1nd/dodam-design-system/components";
+// import { OverlayProvider } from "@b1nd/dodam-design-system/components";
 import NightStudyPage from "./pages";
 
 
@@ -18,9 +18,9 @@ const App = () => (
     <SafeAreaProvider>
       <AppStateProvider>
         <RouteProvider routes={routes}>
-          <OverlayProvider>
+          {/*<OverlayProvider>*/}
             <Router routes={routes} />
-          </OverlayProvider>
+          {/*</OverlayProvider>*/}
         </RouteProvider>
       </AppStateProvider>
     </SafeAreaProvider>
