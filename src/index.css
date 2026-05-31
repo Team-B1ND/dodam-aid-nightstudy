@@ -1,10 +1,10 @@
 @import "@b1nd/dodam-design-system/colors/colors.css";
+
 :root {
-  color-scheme: light;
+  color-scheme: light dark;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  color: #111827;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -12,34 +12,26 @@
   background-color: var(--dds-color-background-default);
 }
 
+/* 라이트 모드 변수 */
+:root[data-theme="light"] {
+  --theme-title-color: #0f172a;
+}
 
-html,
-body,
-#root {
+/* 다크 모드 변수 */
+:root[data-theme="dark"] {
+  --theme-title-color: #f9fafb;
+}
+
+html, body, #root {
   width: 100%;
   min-height: 100dvh;
   margin: 0;
 }
 
+body { overflow-x: hidden; }
 
-body {
-  overflow-x: hidden;
-}
+*, *::before, *::after { box-sizing: border-box; }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
+button, input, select, textarea { font: inherit; }
 
-button,
-input,
-select,
-textarea {
-  font: inherit;
-}
-
-#root {
-  display: flex;
-  flex-direction: column;
-}
+#root { display: flex; flex-direction: column; }
