@@ -4,7 +4,7 @@ import { NormalNightStudy, type NormalNightStudyItem } from './normalNightStudy'
 import {
   getPersonalApplications,
   type PersonalNightStudyApplication,
-} from '../api/nightStudy';
+} from '../types/nightStudy.ts';
 
 import './index.css';
 

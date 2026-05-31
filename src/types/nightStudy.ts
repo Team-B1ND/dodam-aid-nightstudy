@@ -1,59 +1,24 @@
-import { apiClient } from './client';
+import { apiClient } from '../api/client.ts';
 import type { PageResponse } from '@b1nd/api-client';
+import type {
+    NightStudyStatus,
+    NightStudyUser,
+    NightStudyRoom,
+    PersonalNightStudyApplication,
+} from '../hooks/normalNightStudy.ts';
+import type {
+    ProjectNightStudyApplication,
+    NightStudyCount,
+} from '../hooks/projectNightStudy.ts';
 
-export type NightStudyStatus = 'PENDING' | 'ALLOWED' | 'REJECTED';
-
-export interface NightStudyUser {
-    publicId: string;
-    name: string;
-    student?: {
-        grade: number;
-        room: number;
-        number: number;
-    };
-}
-
-export interface NightStudyRoom {
-    id: number;
-    name: string;
-}
-
-export interface PersonalNightStudyApplication {
-    id: string;
-    description: string;
-    period: number;
-    startAt: string;
-    endAt: string;
-    rejectionReason: string | null;
-    status: NightStudyStatus;
-    needPhone: boolean;
-    needPhoneReason: string | null;
-    leader: NightStudyUser;
-    members: NightStudyUser[];
-    type: 'PERSONAL';
-    room: NightStudyRoom | null;
-}
-
-export interface ProjectNightStudyApplication {
-    id: string;
-    name: string;
-    description: string;
-    period: number;
-    startAt: string;
-    endAt: string;
-    rejectionReason: string | null;
-    status: NightStudyStatus;
-    leader: NightStudyUser;
-    members: NightStudyUser[];
-    type: 'PROJECT';
-    room: NightStudyRoom | null;
-}
-
-export interface NightStudyCount {
-    personal: { period1: number; period2: number };
-    project:  { period1: number; period2: number };
-    total:    { period1: number; period2: number };
-}
+export type {
+    NightStudyStatus,
+    NightStudyUser,
+    NightStudyRoom,
+    PersonalNightStudyApplication,
+    ProjectNightStudyApplication,
+    NightStudyCount,
+};
 
 // ──────────────────────────────
 // 일반 심자
