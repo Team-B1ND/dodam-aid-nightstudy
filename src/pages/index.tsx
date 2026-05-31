@@ -3,8 +3,8 @@ import { useState, useEffect } from 'react';
 import { NormalNightStudy, type NormalNightStudyItem } from './normalNightStudy';
 import {
   getPersonalApplications,
-  allowApplication,
-  pendingApplication,
+  // allowApplication,
+  // pendingApplication,
   type PersonalNightStudyApplication,
 } from '../api/nightStudy';
 
