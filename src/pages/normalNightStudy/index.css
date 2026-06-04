@@ -1,0 +1,100 @@
+.normal-night-study {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.normal-night-study__summary {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    color: var(--dds-color-text-tertiary);
+}
+
+.normal-night-study__summary strong {
+    color: var(--dds-color-text-primary);
+    font-weight: 600;
+}
+
+.normal-night-study__summary-divider {
+    width: 1px;
+    height: 12px;
+    background-color: var(--dds-color-border-normal);
+}
+
+.normal-night-study__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--dds-color-background-surface);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.normal-night-study__item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 16px;
+    border-bottom: 1px solid var(--dds-color-border-subtle);
+}
+
+.normal-night-study__item:last-child {
+    border-bottom: none;
+}
+
+.normal-night-study__checkbox {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    border: 2px solid var(--dds-color-border-normal);
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    transition: background-color 0.15s, border-color 0.15s;
+}
+
+.normal-night-study__checkbox--checked {
+    background-color: var(--dds-color-brand-primary);
+    border-color: var(--dds-color-brand-primary);
+}
+
+.normal-night-study__info {
+    flex: 1;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--dds-color-text-primary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.normal-night-study__dot {
+    color: var(--dds-color-text-tertiary);
+    font-size: 13px;
+}
+
+.normal-night-study__badge {
+    flex-shrink: 0;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.normal-night-study__badge--allowed {
+    background-color: var(--dds-color-brand-primary);
+    color: var(--dds-color-static-white);
+}
+
+.normal-night-study__badge--pending {
+    background-color: var(--dds-color-status-error);
+    color: var(--dds-color-static-white);
+}

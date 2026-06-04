@@ -1,0 +1,44 @@
+.night-study-page {
+  flex: 1;
+  width: 100%;
+  min-height: 100dvh;
+  padding:
+          calc(env(safe-area-inset-top) + 20px)
+          16px
+          calc(env(safe-area-inset-bottom) + 24px);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: var(--dds-color-background-default);
+}
+
+.night-study-page__title {
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.2;
+  letter-spacing: -0.04em;
+  color: var(--dds-color-text-primary);
+}
+
+.night-study-page__field-group {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px
+}
+
+.night-study-page__field-group > * {
+  min-width: 0;
+}
+
+.night-study-page__search {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  .night-study-page {
+    max-width: 480px;
+    margin: 0 auto;
+    padding-inline: 20px;
+  }
+}
