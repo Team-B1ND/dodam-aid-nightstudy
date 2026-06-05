@@ -1,0 +1,40 @@
+.night-study-page--project nav {
+    background-color: transparent;
+}
+
+.night-study-page--project nav button > div:first-child {
+    background-color: transparent;
+}
+
+.night-study-page--project nav button svg g path {
+    fill: var(--dds-color-text-primary);
+}
+
+.night-study-page--project .night-study-page__field-group {
+    display: flex;
+    align-items: stretch;
+    gap: 24px;
+}
+
+.night-study-page--project .night-study-page__field-group > div {
+    width: 240px;
+}
+
+.project-night-study {
+    display: flex;
+    flex-direction: column;
+}
+
+.project-night-study__empty,
+.project-night-study__error {
+    margin: 0;
+    font-size: 14px;
+}
+
+.project-night-study__empty {
+    color: var(--dds-color-text-tertiary);
+}
+
+.project-night-study__error {
+    color: var(--dds-color-status-error);
+}
