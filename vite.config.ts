@@ -1,28 +1,24 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig, loadEnv } from 'vite';
+import react from '@vitejs/plugin-react';
 
-export default defineConfig({
-  plugins: [react()],
-  server: {
-    proxy: {
-      '/nightstudy': {
-        target: 'https://dodam-api.b1nd.com',
+export default defineConfig(({ mode }) => {
+    const env = loadEnv(mode, process.cwd(), '');
+
+    const createDodamProxy = () => ({
+        target: env.VITE_API_URL,
         changeOrigin: true,
         secure: false,
         cookieDomainRewrite: 'localhost',
-      },
-      '/auth': {
-        target: 'https://dodam-api.b1nd.com',
-        changeOrigin: true,
-        secure: false,
-        cookieDomainRewrite: 'localhost',
-      },
-      '/user': {
-        target: 'https://dodam-api.b1nd.com',
-        changeOrigin: true,
-        secure: false,
-        cookieDomainRewrite: 'localhost',
-      },
-    }
-  }
-})
+    });
+
+    return {
+        plugins: [react()],
+        server: {
+            proxy: {
+                '/nightstudy': createDodamProxy(),
+                '/auth': createDodamProxy(),
+                '/user': createDodamProxy(),
+            },
+        },
+    };
+});
