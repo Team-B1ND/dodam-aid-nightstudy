@@ -74,6 +74,15 @@
     display: flex;
     align-items: center;
     gap: 6px;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    text-align: left;
+    cursor: pointer;
+}
+
+.normal-night-study__info:disabled {
+    cursor: default;
 }
 
 .normal-night-study__dot {
@@ -83,10 +92,16 @@
 
 .normal-night-study__badge {
     flex-shrink: 0;
+    border: 0;
     padding: 6px 14px;
     border-radius: 8px;
     font-size: 13px;
     font-weight: 600;
+    cursor: pointer;
+}
+
+span.normal-night-study__badge {
+    cursor: default;
 }
 
 .normal-night-study__badge--allowed {

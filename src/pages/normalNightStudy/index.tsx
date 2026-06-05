@@ -9,6 +9,7 @@ export interface NormalNightStudyItem {
   studentName: string;
   classInfo: string;
   time: NightStudyTime;
+  timeSuffix?: string;
   status: NightStudyStatus;
   checked: boolean;
 }
@@ -16,9 +17,16 @@ export interface NormalNightStudyItem {
 interface NormalNightStudyProps {
   items: NormalNightStudyItem[];
   onToggleCheck: (id: string) => void;
+  onItemClick?: (id: string) => void;
+  onStatusClick?: (id: string) => void;
 }
 
-export const NormalNightStudy = ({ items, onToggleCheck }: NormalNightStudyProps) => {
+export const NormalNightStudy = ({
+  items,
+  onToggleCheck,
+  onItemClick,
+  onStatusClick,
+}: NormalNightStudyProps) => {
   const confirmedCount = items.filter((item) => item.checked).length;
   const unconfirmedCount = items.filter((item) => !item.checked).length;
 
@@ -38,6 +46,7 @@ export const NormalNightStudy = ({ items, onToggleCheck }: NormalNightStudyProps
           {items.map((item) => (
               <li key={item.id} className="normal-night-study__item">
                 <button
+                    type="button"
                     className={`normal-night-study__checkbox ${item.checked ? 'normal-night-study__checkbox--checked' : ''}`}
                     onClick={() => onToggleCheck(item.id)}
                     aria-checked={item.checked}
@@ -50,23 +59,42 @@ export const NormalNightStudy = ({ items, onToggleCheck }: NormalNightStudyProps
                   )}
                 </button>
 
-                <span className="normal-night-study__info">
-              {item.studentName}
+                <button
+                    type="button"
+                    className="normal-night-study__info"
+                    onClick={() => onItemClick?.(item.id)}
+                    disabled={!onItemClick}
+                >
+                  {item.studentName}
                   <span className="normal-night-study__dot">·</span>
                   {item.classInfo}
                   <span className="normal-night-study__dot">·</span>
-                  {item.time}까지
-            </span>
+                  {item.time}{item.timeSuffix ?? '까지'}
+                </button>
 
-                <span
-                    className={`normal-night-study__badge ${
-                        item.status === 'ALLOWED'
-                            ? 'normal-night-study__badge--allowed'
-                            : 'normal-night-study__badge--pending'
-                    }`}
-                >
-              {item.status === 'ALLOWED' ? '승인' : '미승인'}
-            </span>
+                {onStatusClick ? (
+                    <button
+                        type="button"
+                        className={`normal-night-study__badge ${
+                            item.status === 'ALLOWED'
+                                ? 'normal-night-study__badge--allowed'
+                                : 'normal-night-study__badge--pending'
+                        }`}
+                        onClick={() => onStatusClick(item.id)}
+                    >
+                      {item.status === 'ALLOWED' ? '승인' : '미승인'}
+                    </button>
+                ) : (
+                    <span
+                        className={`normal-night-study__badge ${
+                            item.status === 'ALLOWED'
+                                ? 'normal-night-study__badge--allowed'
+                                : 'normal-night-study__badge--pending'
+                        }`}
+                    >
+                      {item.status === 'ALLOWED' ? '승인' : '미승인'}
+                    </span>
+                )}
               </li>
           ))}
         </ul>

@@ -10,7 +10,8 @@ import { NormalNightStudy, type NormalNightStudyItem } from '../normalNightStudy
 import { ProjectDetailDialog } from './components/ProjectDetailDialog/index.tsx';
 import './index.css';
 
-const getPeriodText = (period: number) => `심자${period}`;
+const getPeriodText = (period: number): NormalNightStudyItem['time'] =>
+    period === 2 ? '심자2' : '심자1';
 
 interface Props {
     searchTerm: string;

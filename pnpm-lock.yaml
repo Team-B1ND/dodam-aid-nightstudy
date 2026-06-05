@@ -20,9 +20,6 @@ importers:
       framer-motion:
         specifier: ^12.40.0
         version: 12.40.0(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      icons:
-        specifier: link:@b1nd/dodam-design-system/icons
-        version: link:@b1nd/dodam-design-system/icons
       react:
         specifier: ^19.2.6
         version: 19.2.6

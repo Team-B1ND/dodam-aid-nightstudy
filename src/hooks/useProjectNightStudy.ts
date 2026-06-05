@@ -40,7 +40,7 @@ export const useGetProjectNightStudies = (params: GetProjectParams = {}) => {
     }, [params.page, params.size, params.keyword, params.status]);
 
     useEffect(() => {
-        fetch();
+        void Promise.resolve().then(fetch);
     }, [fetch]);
 
     return { data, isLoading, error, refetch: fetch };
