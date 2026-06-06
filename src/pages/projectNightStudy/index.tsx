@@ -5,12 +5,10 @@ import {
     useRejectProjectNightStudy,
 } from '../../hooks/useProjectNightStudy';
 import type { ProjectNightStudyApplication } from '../../types/nightStudy';
-import { NormalNightStudy, type NormalNightStudyItem } from '../normalNightStudy';
 import { ProjectDetailDialog } from './components/ProjectDetailDialog/index.tsx';
 import './index.css';
 
-const getPeriodText = (period: number): NormalNightStudyItem['time'] =>
-    period === 2 ? '심자2' : '심자1';
+const getPeriodText = (period: number) => (period === 2 ? '심자2' : '심자1');
 
 interface Props {
     searchTerm: string;
@@ -82,22 +80,12 @@ export const ProjectNightStudy = ({
         }
     );
 
-    const projectItems: NormalNightStudyItem[] = filteredProjects.map((project) => ({
-        id: project.id,
-        studentName: project.name,
-        classInfo: project.room?.name ?? '장소 미정',
-        time: getPeriodText(project.period),
-        timeSuffix: '',
-        status: project.status === 'ALLOWED' ? 'ALLOWED' : 'PENDING',
-        checked: selectedProjectIds.includes(project.id),
-    }));
-
-    const getProjectById = (id: string) =>
-        filteredProjects.find((project) => project.id === id);
-
     if (isLoading) {
         return (
-            <section className="project-night-study" aria-label="프로젝트 심자 목록">
+            <section
+                className="project-night-study"
+                aria-label="프로젝트 심자 목록"
+            >
                 <p className="project-night-study__empty">불러오는 중...</p>
             </section>
         );
@@ -105,7 +93,10 @@ export const ProjectNightStudy = ({
 
     if (error) {
         return (
-            <section className="project-night-study" aria-label="프로젝트 심자 목록">
+            <section
+                className="project-night-study"
+                aria-label="프로젝트 심자 목록"
+            >
                 <p className="project-night-study__error">{error}</p>
             </section>
         );
@@ -113,8 +104,11 @@ export const ProjectNightStudy = ({
 
     return (
         <>
-            <section className="project-night-study" aria-label="프로젝트 심자 목록">
-                {projectItems.length === 0 ? (
+            <section
+                className="project-night-study"
+                aria-label="프로젝트 심자 목록"
+            >
+                {filteredProjects.length === 0 ? (
                     <p className="project-night-study__empty">
                         프로젝트가 없습니다.
                     </p>
@@ -129,20 +123,86 @@ export const ProjectNightStudy = ({
                             <span aria-hidden="true">·</span>
                             <span>제어기능</span>
                         </div>
-                        <NormalNightStudy
-                            items={projectItems}
-                            onToggleCheck={toggleProject}
-                            onItemClick={(id) => {
-                                const project = getProjectById(id);
-                                if (project) setSelectedProject(project);
-                            }}
-                            onStatusClick={(id) => {
-                                const project = getProjectById(id);
-                                if (project) setSelectedProject(project);
-                            }}
-                        />
+                        <ul className="project-night-study__list">
+                            {filteredProjects.map((project) => {
+                                const isChecked = selectedProjectIds.includes(
+                                    project.id
+                                );
+                                const isAllowed = project.status === 'ALLOWED';
+
+                                return (
+                                    <li
+                                        key={project.id}
+                                        className="project-night-study__item"
+                                    >
+                                        <button
+                                            type="button"
+                                            className={`project-night-study__checkbox ${
+                                                isChecked
+                                                    ? 'project-night-study__checkbox--checked'
+                                                    : ''
+                                            }`}
+                                            onClick={() =>
+                                                toggleProject(project.id)
+                                            }
+                                            aria-checked={isChecked}
+                                            role="checkbox"
+                                        >
+                                            {isChecked && (
+                                                <svg
+                                                    width="14"
+                                                    height="11"
+                                                    viewBox="0 0 14 11"
+                                                    fill="none"
+                                                >
+                                                    <path
+                                                        d="M1 5L5.5 9.5L13 1"
+                                                        stroke="white"
+                                                        strokeWidth="2"
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                    />
+                                                </svg>
+                                            )}
+                                        </button>
+
+                                        <button
+                                            type="button"
+                                            className="project-night-study__info"
+                                            onClick={() =>
+                                                setSelectedProject(project)
+                                            }
+                                        >
+                                            {project.name}
+                                            <span className="project-night-study__dot">
+                                                ·
+                                            </span>
+                                            {project.room?.name ?? '장소 미정'}
+                                            <span className="project-night-study__dot">
+                                                ·
+                                            </span>
+                                            {getPeriodText(project.period)}
+                                        </button>
+
+                                        <button
+                                            type="button"
+                                            className={`project-night-study__badge ${
+                                                isAllowed
+                                                    ? 'project-night-study__badge--allowed'
+                                                    : 'project-night-study__badge--pending'
+                                            }`}
+                                            onClick={() =>
+                                                setSelectedProject(project)
+                                            }
+                                        >
+                                            {isAllowed ? '승인' : '미승인'}
+                                        </button>
+                                    </li>
+                                );
+                            })}
+                        </ul>
                     </>
-                    )}
+                )}
             </section>
 
             {selectedProject && (
