@@ -4,11 +4,14 @@ import './index.css'
 import { initTheme } from '@b1nd/dodam-design-system/themes'
 import '@b1nd/dodam-design-system/colors/colors.css'
 import App from "./App.tsx"
+import { initializeToken } from './api/client.ts'
 
 initTheme();
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
+initializeToken().then(() => {
+    createRoot(document.getElementById('root')!).render(
+        <StrictMode>
+            <App />
+        </StrictMode>,
+    )
+});
