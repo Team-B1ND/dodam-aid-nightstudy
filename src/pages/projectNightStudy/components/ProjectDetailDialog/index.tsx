@@ -34,11 +34,11 @@ export const ProjectDetailDialog = ({
 
     const allMembers = [project.leader, ...project.members].filter(
         (member, index, members) => {
-            const key = member.publicId || `${member.name}-${member.student
+            const key = member.publicId ?? `${member.name}-${member.student
                 ? formatStudentId(member.student)
                 : 'no-student'}`;
             return members.findIndex((item) => {
-                const itemKey = item.publicId || `${item.name}-${item.student
+                const itemKey = item.publicId ?? `${item.name}-${item.student
                     ? formatStudentId(item.student)
                     : 'no-student'}`;
                 return itemKey === key;
