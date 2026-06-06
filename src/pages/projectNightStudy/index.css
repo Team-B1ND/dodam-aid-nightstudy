@@ -25,6 +25,25 @@
     flex-direction: column;
 }
 
+.project-night-study__header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding-top: 2px;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--dds-color-text-primary);
+}
+
+.project-night-study__header span[aria-hidden='true'] {
+    color: var(--dds-color-text-tertiary);
+}
+
+.project-night-study .normal-night-study__summary {
+    display: none;
+}
+
 .project-night-study__empty,
 .project-night-study__error {
     margin: 0;

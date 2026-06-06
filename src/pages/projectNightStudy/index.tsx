@@ -3,7 +3,6 @@ import {
     useGetProjectNightStudies,
     useAllowProjectNightStudy,
     useRejectProjectNightStudy,
-    usePendingProjectNightStudy,
 } from '../../hooks/useProjectNightStudy';
 import type { ProjectNightStudyApplication } from '../../types/nightStudy';
 import { NormalNightStudy, type NormalNightStudyItem } from '../normalNightStudy';
@@ -33,20 +32,11 @@ export const ProjectNightStudy = ({
 
     const { mutate: allow } = useAllowProjectNightStudy(refetch);
     const { mutate: reject } = useRejectProjectNightStudy(refetch);
-    const { mutate: pending } = usePendingProjectNightStudy(refetch);
 
     const toggleProject = (id: string) => {
         setSelectedProjectIds((prev) =>
             prev.includes(id) ? prev.filter((sid) => sid !== id) : [...prev, id]
         );
-    };
-
-    const toggleStatus = (project: ProjectNightStudyApplication) => {
-        if (project.status === 'ALLOWED') {
-            pending(project.id);
-        } else {
-            allow(project.id);
-        }
     };
 
     const handleApprove = (id: string) => {
@@ -70,13 +60,25 @@ export const ProjectNightStudy = ({
                 .toLowerCase()
                 .includes(searchTerm.trim().toLowerCase());
             const users = getProjectUsers(project);
-            const matchGrade =
-                gradeSelected === '모든 학년' ||
-                users.some((user) => user.student?.grade === Number(gradeSelected[0]));
-            const matchClass =
-                classSelected === '모든 학반' ||
-                users.some((user) => user.student?.room === Number(classSelected[0]));
-            return matchName && matchGrade && matchClass;
+            const selectedGrade =
+                gradeSelected === '모든 학년' ? null : Number(gradeSelected[0]);
+            const selectedClass =
+                classSelected === '모든 학반' ? null : Number(classSelected[0]);
+            const matchStudent =
+                selectedGrade === null && selectedClass === null
+                    ? true
+                    : users.some((user) => {
+                          if (!user.student) return false;
+                          const matchGrade =
+                              selectedGrade === null ||
+                              user.student.grade === selectedGrade;
+                          const matchClass =
+                              selectedClass === null ||
+                              user.student.room === selectedClass;
+                          return matchGrade && matchClass;
+                      });
+
+            return matchName && matchStudent;
         }
     );
 
@@ -117,18 +119,29 @@ export const ProjectNightStudy = ({
                         프로젝트가 없습니다.
                     </p>
                 ) : (
-                    <NormalNightStudy
-                        items={projectItems}
-                        onToggleCheck={toggleProject}
-                        onItemClick={(id) => {
-                            const project = getProjectById(id);
-                            if (project) setSelectedProject(project);
-                        }}
-                        onStatusClick={(id) => {
-                            const project = getProjectById(id);
-                            if (project) toggleStatus(project);
-                        }}
-                    />
+                    <>
+                        <div className="project-night-study__header">
+                            <span>프로젝트명</span>
+                            <span aria-hidden="true">·</span>
+                            <span>장소</span>
+                            <span aria-hidden="true">·</span>
+                            <span>진행 정보</span>
+                            <span aria-hidden="true">·</span>
+                            <span>제어기능</span>
+                        </div>
+                        <NormalNightStudy
+                            items={projectItems}
+                            onToggleCheck={toggleProject}
+                            onItemClick={(id) => {
+                                const project = getProjectById(id);
+                                if (project) setSelectedProject(project);
+                            }}
+                            onStatusClick={(id) => {
+                                const project = getProjectById(id);
+                                if (project) setSelectedProject(project);
+                            }}
+                        />
+                    </>
                     )}
             </section>
 

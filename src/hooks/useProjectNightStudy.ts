@@ -5,7 +5,10 @@ import {
     rejectApplication,
     pendingApplication,
 } from '../types/nightStudy';
-import type { ProjectNightStudyApplication, NightStudyStatus } from '../types/nightStudy';
+import type {
+    ProjectNightStudyApplication,
+    NightStudyStatus,
+} from '../types/nightStudy';
 import type { PageResponse } from '@b1nd/api-client';
 
 interface GetProjectParams {
@@ -16,7 +19,8 @@ interface GetProjectParams {
 }
 
 export const useGetProjectNightStudies = (params: GetProjectParams = {}) => {
-    const [data, setData] = useState<PageResponse<ProjectNightStudyApplication> | null>(null);
+    const [data, setData] =
+        useState<PageResponse<ProjectNightStudyApplication> | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
