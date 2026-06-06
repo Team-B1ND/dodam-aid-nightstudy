@@ -16,9 +16,9 @@ jobs:
         with:
           node-version: '20'
 
-      - run: npm install
+      - run: pnpm install
 
-      - run: npm run build
+      - run: pnpm dev
 
       - name: dist 폴더 zip으로 압축
         run: zip -r dist.zip dist/
