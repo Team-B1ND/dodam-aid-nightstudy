@@ -1,0 +1,150 @@
+.project-dialog__overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    z-index: 100;
+    padding: 0 0 env(safe-area-inset-bottom);
+}
+
+.project-dialog {
+    width: 100%;
+    max-width: 480px;
+    background-color: var(--dds-color-background-surface);
+    border-radius: 24px 24px 0 0;
+    padding: 28px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.project-dialog__title {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--dds-color-text-primary);
+    letter-spacing: -0.03em;
+}
+
+.project-dialog__info {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.project-dialog__info li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.project-dialog__label {
+    font-size: 15px;
+    color: var(--dds-color-text-tertiary);
+}
+
+.project-dialog__value {
+    font-size: 15px;
+    color: var(--dds-color-text-primary);
+}
+
+.project-dialog__value--date {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--dds-color-brand-primary);
+}
+
+.project-dialog__calendar-icon {
+    font-size: 16px;
+}
+
+.project-dialog__divider {
+    border: none;
+    border-top: 1px solid var(--dds-color-border-subtle);
+    margin: 0;
+}
+
+.project-dialog__members {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px 8px;
+}
+
+.project-dialog__member {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+    color: var(--dds-color-text-primary);
+}
+
+.project-dialog__dot {
+    color: var(--dds-color-text-tertiary);
+}
+
+.project-dialog__reject-area {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.project-dialog__reject-input {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid var(--dds-color-border-normal);
+    background-color: var(--dds-color-background-default);
+    color: var(--dds-color-text-primary);
+    font-size: 15px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.project-dialog__reject-input::placeholder {
+    color: var(--dds-color-text-tertiary);
+}
+
+.project-dialog__actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.project-dialog__btn {
+    padding: 16px;
+    border-radius: 14px;
+    border: none;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+}
+
+.project-dialog__btn:active {
+    opacity: 0.75;
+}
+
+.project-dialog__btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.project-dialog__btn--reject {
+    background-color: var(--dds-color-background-neutral, #2a2c2c);
+    color: var(--dds-color-text-primary);
+}
+
+.project-dialog__btn--approve {
+    background-color: var(--dds-color-brand-primary);
+    color: var(--dds-color-static-white);
+}

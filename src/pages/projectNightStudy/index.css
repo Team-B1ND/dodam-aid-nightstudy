@@ -1,29 +1,47 @@
-.normal-night-study {
+.night-study-page--project nav {
+    background-color: transparent;
+}
+
+.night-study-page--project nav button > div:first-child {
+    background-color: transparent;
+}
+
+.night-study-page--project nav button svg g path {
+    fill: var(--dds-color-text-primary);
+}
+
+.night-study-page--project .night-study-page__field-group {
+    display: flex;
+    align-items: stretch;
+    gap: 24px;
+}
+
+.night-study-page--project .night-study-page__field-group > div {
+    width: 240px;
+}
+
+.project-night-study {
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
 
-.normal-night-study__summary {
+.project-night-study__header {
     display: flex;
     align-items: center;
-    gap: 12px;
-    font-size: 14px;
+    gap: 6px;
+    padding-top: 2px;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--dds-color-text-primary);
+}
+
+.project-night-study__header span[aria-hidden='true'] {
     color: var(--dds-color-text-tertiary);
 }
 
-.normal-night-study__summary strong {
-    color: var(--dds-color-text-primary);
-    font-weight: 600;
-}
-
-.normal-night-study__summary-divider {
-    width: 1px;
-    height: 12px;
-    background-color: var(--dds-color-border-normal);
-}
-
-.normal-night-study__list {
+.project-night-study__list {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -34,7 +52,7 @@
     overflow: hidden;
 }
 
-.normal-night-study__item {
+.project-night-study__item {
     display: flex;
     align-items: center;
     gap: 14px;
@@ -42,11 +60,11 @@
     border-bottom: 1px solid var(--dds-color-border-subtle);
 }
 
-.normal-night-study__item:last-child {
+.project-night-study__item:last-child {
     border-bottom: none;
 }
 
-.normal-night-study__checkbox {
+.project-night-study__checkbox {
     flex-shrink: 0;
     width: 24px;
     height: 24px;
@@ -61,13 +79,14 @@
     transition: background-color 0.15s, border-color 0.15s;
 }
 
-.normal-night-study__checkbox--checked {
+.project-night-study__checkbox--checked {
     background-color: var(--dds-color-brand-primary);
     border-color: var(--dds-color-brand-primary);
 }
 
-.normal-night-study__info {
+.project-night-study__info {
     flex: 1;
+    min-width: 0;
     font-size: 15px;
     font-weight: 500;
     color: var(--dds-color-text-primary);
@@ -81,16 +100,12 @@
     cursor: pointer;
 }
 
-.normal-night-study__info:disabled {
-    cursor: default;
-}
-
-.normal-night-study__dot {
+.project-night-study__dot {
     color: var(--dds-color-text-tertiary);
     font-size: 13px;
 }
 
-.normal-night-study__badge {
+.project-night-study__badge {
     flex-shrink: 0;
     border: 0;
     padding: 6px 14px;
@@ -100,16 +115,26 @@
     cursor: pointer;
 }
 
-span.normal-night-study__badge {
-    cursor: default;
-}
-
-.normal-night-study__badge--allowed {
+.project-night-study__badge--allowed {
     background-color: var(--dds-color-brand-primary);
     color: var(--dds-color-static-white);
 }
 
-.normal-night-study__badge--pending {
+.project-night-study__badge--pending {
     background-color: var(--dds-color-status-error);
     color: var(--dds-color-static-white);
+}
+
+.project-night-study__empty,
+.project-night-study__error {
+    margin: 0;
+    font-size: 14px;
+}
+
+.project-night-study__empty {
+    color: var(--dds-color-text-tertiary);
+}
+
+.project-night-study__error {
+    color: var(--dds-color-status-error);
 }
