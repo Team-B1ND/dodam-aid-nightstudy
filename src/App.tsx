@@ -26,6 +26,7 @@ const TokenInitializer = () => {
 
     useEffect(() => {
         const unsubscribe = bridge.subscribe("OAUTH_GET_TOKEN", async (data) => {
+            console.log('Bridge 응답 데이터:', JSON.stringify(data));
             const response = data as { accessToken: string };
             if (response.accessToken) {
                 localStorage.setItem("access_token", response.accessToken);
