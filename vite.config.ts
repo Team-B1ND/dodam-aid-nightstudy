@@ -13,13 +13,13 @@ export default defineConfig(({ mode }) => {
 
     return {
         plugins: [react()],
-        base: '/dodam-aid-nightstudy/', 
+        base: './',
         server: {
             proxy: {
                 '/nightstudy': createDodamProxy(),
                 '/auth': createDodamProxy(),
                 '/user': createDodamProxy(),
-                '/oauth': createDodamProxy(),  // 추가
+                '/oauth': createDodamProxy(),
             },
         },
     };
