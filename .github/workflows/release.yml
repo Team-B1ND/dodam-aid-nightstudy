@@ -21,6 +21,11 @@ jobs:
       - run: pnpm install
 
       - run: pnpm run build
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          VITE_CLIENT_ID: ${{ secrets.VITE_CLIENT_ID }}
+          VITE_CLIENT_SECRET: ${{ secrets.VITE_CLIENT_SECRET }}
+          VITE_REDIRECT_URI: ${{ secrets.VITE_REDIRECT_URI }}
 
       - name: dist 폴더 zip으로 압축
         run: zip -r dist.zip dist/
