@@ -26,7 +26,13 @@ const TokenInitializer = () => {
 
     useEffect(() => {
         const unsubscribe = bridge.subscribe("OAUTH_GET_TOKEN", async (data) => {
-            console.log('Bridge 응답 데이터:', JSON.stringify(data));
+            // 화면에 데이터 표시
+            document.title = JSON.stringify(data);
+            const div = document.createElement('div');
+            div.style.cssText = 'position:fixed;top:0;left:0;right:0;background:red;color:white;font-size:12px;z-index:9999;word-break:break-all;padding:8px;';
+            div.textContent = 'Bridge 응답: ' + JSON.stringify(data);
+            document.body.appendChild(div);
+
             const response = data as { accessToken: string };
             if (response.accessToken) {
                 localStorage.setItem("access_token", response.accessToken);
