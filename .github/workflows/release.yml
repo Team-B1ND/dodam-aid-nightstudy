@@ -28,7 +28,7 @@ jobs:
           VITE_REDIRECT_URI: ${{ secrets.VITE_REDIRECT_URI }}
 
       - name: dist 폴더 zip으로 압축
-        run: zip -r dist.zip dist/
+        run: cd dist && zip -r ../dist.zip . && cd ..
 
       - uses: softprops/action-gh-release@v1
         with:
