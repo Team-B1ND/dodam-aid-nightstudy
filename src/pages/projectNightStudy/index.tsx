@@ -6,6 +6,7 @@ import {
 } from '../../hooks/useProjectNightStudy';
 import type { ProjectNightStudyApplication } from '../../types/nightStudy';
 import { ProjectDetailDialog } from './components/ProjectDetailDialog/index.tsx';
+import { NoPermission } from '../../components/NoPermission';
 import './index.css';
 
 const getPeriodText = (period: number) => (period === 2 ? '심자2' : '심자1');
@@ -25,7 +26,8 @@ export const ProjectNightStudy = ({
     const [selectedProject, setSelectedProject] =
         useState<ProjectNightStudyApplication | null>(null);
 
-    const { data, isLoading, error, refetch } = useGetProjectNightStudies();
+    const { data, isLoading, error, isForbidden, refetch } =
+        useGetProjectNightStudies();
     const projects = data?.content ?? [];
 
     const { mutate: allow } = useAllowProjectNightStudy(refetch);
@@ -89,6 +91,10 @@ export const ProjectNightStudy = ({
                 <p className="project-night-study__empty">불러오는 중...</p>
             </section>
         );
+    }
+
+    if (isForbidden) {
+        return <NoPermission />;
     }
 
     if (error) {

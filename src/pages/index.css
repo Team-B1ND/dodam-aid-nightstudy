@@ -10,6 +10,10 @@
     background-color: var(--dds-color-background-default);
 }
 
+.night-study-page--forbidden {
+    justify-content: center;
+}
+
 .night-study-page__field-group {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));

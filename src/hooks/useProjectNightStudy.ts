@@ -10,6 +10,7 @@ import type {
     NightStudyStatus,
 } from '../types/nightStudy';
 import type { PageResponse } from '@b1nd/api-client';
+import { isForbiddenError } from '../api/error';
 
 interface GetProjectParams {
     page?: number;
@@ -23,10 +24,12 @@ export const useGetProjectNightStudies = (params: GetProjectParams = {}) => {
         useState<PageResponse<ProjectNightStudyApplication> | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [isForbidden, setIsForbidden] = useState(false);
 
     const fetch = useCallback(async () => {
         setIsLoading(true);
         setError(null);
+        setIsForbidden(false);
         try {
             const res = await getProjectApplications({
                 page: params.page ?? 0,
@@ -36,7 +39,8 @@ export const useGetProjectNightStudies = (params: GetProjectParams = {}) => {
             });
             setData(res.data);
         } catch (e) {
-            setError('프로젝트 심자 목록을 불러오지 못했어요.');
+            if (isForbiddenError(e)) setIsForbidden(true);
+            else setError('프로젝트 심자 목록을 불러오지 못했어요.');
             console.error(e);
         } finally {
             setIsLoading(false);
@@ -47,7 +51,7 @@ export const useGetProjectNightStudies = (params: GetProjectParams = {}) => {
         void Promise.resolve().then(fetch);
     }, [fetch]);
 
-    return { data, isLoading, error, refetch: fetch };
+    return { data, isLoading, error, isForbidden, refetch: fetch };
 };
 
 export const useAllowProjectNightStudy = (onSuccess?: () => void) => {

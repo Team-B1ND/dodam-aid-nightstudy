@@ -12,6 +12,8 @@ import {
     getPersonalApplications,
     type PersonalNightStudyApplication,
 } from '../types/nightStudy';
+import { isForbiddenError } from '../api/error';
+import { NoPermission } from '../components/NoPermission';
 
 import './index.css';
 
@@ -41,6 +43,7 @@ const NightStudyPage = () => {
     const [normalItems, setNormalItems] = useState<NormalNightStudyItem[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [forbidden, setForbidden] = useState(false);
 
     const grade = [
         { name: '모든 학년', value: '모든 학년' },
@@ -71,6 +74,7 @@ const NightStudyPage = () => {
         const fetchAll = async () => {
             setLoading(true);
             setError(null);
+            setForbidden(false);
             try {
                 const [pendingRes, allowedRes] = await Promise.all([
                     getPersonalApplications({ page: 0, size: 100, status: 'PENDING' }),
@@ -82,7 +86,8 @@ const NightStudyPage = () => {
                 ];
                 setNormalItems(merged);
             } catch (e) {
-                setError('심자 목록을 불러오지 못했어요.');
+                if (isForbiddenError(e)) setForbidden(true);
+                else setError('심자 목록을 불러오지 못했어요.');
                 console.error(e);
             } finally {
                 setLoading(false);
@@ -111,6 +116,14 @@ const NightStudyPage = () => {
         return matchGrade && matchClass && matchTime && matchSearch;
     });
 
+    if (forbidden) {
+        return (
+            <main className="night-study-page night-study-page--forbidden">
+                <NoPermission />
+            </main>
+        );
+    }
+
     return (
         <main
             className={`night-study-page ${
@@ -118,7 +131,6 @@ const NightStudyPage = () => {
             }`}
         >
             <TopNavBar
-                left={<TopNavBar.BackButton onClick={() => window.history.back()} />}
                 customStyle={{ backgroundColor: 'transparent', padding: 0 }}
             >
                 <TopNavBar.Title hasBackButton>심자 관리</TopNavBar.Title>
