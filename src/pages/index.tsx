@@ -21,7 +21,6 @@ import './index.css';
 const toNormalItem = (item: PersonalNightStudyApplication): NormalNightStudyItem => ({
     id: item.id,
     userId: item.leader.publicId,
-    period: item.period,
     studentName: item.leader.name,
     classInfo: item.leader.student
         ? `${item.leader.student.grade}${item.leader.student.room}${String(item.leader.student.number).padStart(2, '0')}`
@@ -163,7 +162,6 @@ const NightStudyPage = () => {
             <SegmentedButton
                 data={segmentData}
                 setData={setSegmentData}
-                onBlockClick={(value) => console.log(value)}
                 width="100%"
             />
 

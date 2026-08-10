@@ -1,9 +1,5 @@
 import { useState } from 'react';
-import {
-    useGetProjectNightStudies,
-    useAllowProjectNightStudy,
-    useRejectProjectNightStudy,
-} from '../../hooks/useProjectNightStudy';
+import { useGetProjectNightStudies } from '../../hooks/useProjectNightStudy';
 import type { ProjectNightStudyApplication } from '../../types/nightStudy';
 import { ProjectDetailDialog } from './components/ProjectDetailDialog/index.tsx';
 import { NoPermission } from '../../components/NoPermission';
@@ -25,22 +21,9 @@ export const ProjectNightStudy = ({
     const [selectedProject, setSelectedProject] =
         useState<ProjectNightStudyApplication | null>(null);
 
-    const { data, isLoading, error, isForbidden, refetch } =
+    const { data, isLoading, error, isForbidden } =
         useGetProjectNightStudies();
     const projects = data?.content ?? [];
-
-    const { mutate: allow } = useAllowProjectNightStudy(refetch);
-    const { mutate: reject } = useRejectProjectNightStudy(refetch);
-
-    const handleApprove = (id: string) => {
-        allow(id);
-        setSelectedProject(null);
-    };
-
-    const handleReject = (id: string, reason: string) => {
-        reject({ id, reason });
-        setSelectedProject(null);
-    };
 
     const getProjectUsers = (project: ProjectNightStudyApplication) => [
         project.leader,
@@ -120,7 +103,7 @@ export const ProjectNightStudy = ({
                             <span aria-hidden="true">·</span>
                             <span>진행 정보</span>
                             <span aria-hidden="true">·</span>
-                            <span>제어기능</span>
+                            <span>승인 상태</span>
                         </div>
                         <ul className="project-night-study__list">
                             {filteredProjects.map((project) => {
@@ -174,14 +157,8 @@ export const ProjectNightStudy = ({
                 <ProjectDetailDialog
                     project={selectedProject}
                     onClose={() => setSelectedProject(null)}
-                    onApprove={() => handleApprove(selectedProject.id)}
-                    onReject={(reason: string) =>
-                        handleReject(selectedProject.id, reason)
-                    }
                 />
             )}
         </>
     );
 };
-
-export default ProjectNightStudy;

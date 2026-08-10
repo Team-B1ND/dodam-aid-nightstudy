@@ -7,11 +7,9 @@ export type NightStudyTime = '심자1' | '심자2';
 export interface NormalNightStudyItem {
   id: string;
   userId: string;
-  period: number;
   studentName: string;
   classInfo: string;
   time: NightStudyTime;
-  timeSuffix?: string;
   status: NightStudyStatus;
   /** 오늘자 출석 여부 */
   checked: boolean;
@@ -20,8 +18,6 @@ export interface NormalNightStudyItem {
 interface NormalNightStudyProps {
   items: NormalNightStudyItem[];
   onToggleCheck: (id: string) => void;
-  onItemClick?: (id: string) => void;
-  onStatusClick?: (id: string) => void;
   /** 출석 상태를 불러오는 중이면 체크박스를 잠근다 */
   isCheckDisabled?: boolean;
   /** 체크박스가 다루는 출석 교시 (예: `심자1`) */
@@ -31,23 +27,21 @@ interface NormalNightStudyProps {
 export const NormalNightStudy = ({
   items,
   onToggleCheck,
-  onItemClick,
-  onStatusClick,
   isCheckDisabled = false,
   periodLabel,
 }: NormalNightStudyProps) => {
-  const confirmedCount = items.filter((item) => item.checked).length;
-  const unconfirmedCount = items.filter((item) => !item.checked).length;
+  const attendedCount = items.filter((item) => item.checked).length;
+  const notAttendedCount = items.length - attendedCount;
 
   return (
       <div className="normal-night-study">
         <div className="normal-night-study__summary">
         <span className="normal-night-study__summary-item">
-          {periodLabel ? `${periodLabel} 출석 인원` : '출석 인원'}: <strong>{confirmedCount}명</strong>
+          {periodLabel ? `${periodLabel} 출석 인원` : '출석 인원'}: <strong>{attendedCount}명</strong>
         </span>
           <span className="normal-night-study__summary-divider" />
           <span className="normal-night-study__summary-item">
-          미출석 인원: <strong>{unconfirmedCount}명</strong>
+          미출석 인원: <strong>{notAttendedCount}명</strong>
         </span>
         </div>
 
@@ -59,7 +53,7 @@ export const NormalNightStudy = ({
                     className={`normal-night-study__checkbox ${item.checked ? 'normal-night-study__checkbox--checked' : ''}`}
                     onClick={() => onToggleCheck(item.id)}
                     aria-checked={item.checked}
-                    aria-label={`${item.studentName} ${periodLabel ?? ''} 출석 확인`.replace('  ', ' ')}
+                    aria-label={[item.studentName, periodLabel, '출석 확인'].filter(Boolean).join(' ')}
                     role="checkbox"
                     disabled={isCheckDisabled}
                 >
@@ -70,42 +64,23 @@ export const NormalNightStudy = ({
                   )}
                 </button>
 
-                <button
-                    type="button"
-                    className="normal-night-study__info"
-                    onClick={() => onItemClick?.(item.id)}
-                    disabled={!onItemClick}
-                >
+                <div className="normal-night-study__info">
                   {item.studentName}
                   <span className="normal-night-study__dot">·</span>
                   {item.classInfo}
                   <span className="normal-night-study__dot">·</span>
-                  {item.time}{item.timeSuffix ?? '까지'}
-                </button>
+                  {item.time}까지
+                </div>
 
-                {onStatusClick ? (
-                    <button
-                        type="button"
-                        className={`normal-night-study__badge ${
-                            item.status === 'ALLOWED'
-                                ? 'normal-night-study__badge--allowed'
-                                : 'normal-night-study__badge--pending'
-                        }`}
-                        onClick={() => onStatusClick(item.id)}
-                    >
-                      {item.status === 'ALLOWED' ? '승인' : '미승인'}
-                    </button>
-                ) : (
-                    <span
-                        className={`normal-night-study__badge ${
-                            item.status === 'ALLOWED'
-                                ? 'normal-night-study__badge--allowed'
-                                : 'normal-night-study__badge--pending'
-                        }`}
-                    >
-                      {item.status === 'ALLOWED' ? '승인' : '미승인'}
-                    </span>
-                )}
+                <span
+                    className={`normal-night-study__badge ${
+                        item.status === 'ALLOWED'
+                            ? 'normal-night-study__badge--allowed'
+                            : 'normal-night-study__badge--pending'
+                    }`}
+                >
+                  {item.status === 'ALLOWED' ? '승인' : '미승인'}
+                </span>
               </li>
           ))}
         </ul>

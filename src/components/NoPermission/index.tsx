@@ -33,5 +33,3 @@ export const NoPermission = () => (
         </div>
     </section>
 );
-
-export default NoPermission;

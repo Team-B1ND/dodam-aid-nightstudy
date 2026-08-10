@@ -1,10 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import {
-    getProjectApplications,
-    allowApplication,
-    rejectApplication,
-    pendingApplication,
-} from '../types/nightStudy';
+import { getProjectApplications } from '../types/nightStudy';
 import type {
     ProjectNightStudyApplication,
     NightStudyStatus,
@@ -52,58 +47,4 @@ export const useGetProjectNightStudies = (params: GetProjectParams = {}) => {
     }, [fetch]);
 
     return { data, isLoading, error, isForbidden, refetch: fetch };
-};
-
-export const useAllowProjectNightStudy = (onSuccess?: () => void) => {
-    const [isLoading, setIsLoading] = useState(false);
-
-    const mutate = async (id: string) => {
-        setIsLoading(true);
-        try {
-            await allowApplication(id);
-            onSuccess?.();
-        } catch (e) {
-            console.error(e);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    return { mutate, isLoading };
-};
-
-export const useRejectProjectNightStudy = (onSuccess?: () => void) => {
-    const [isLoading, setIsLoading] = useState(false);
-
-    const mutate = async ({ id, reason }: { id: string; reason: string }) => {
-        setIsLoading(true);
-        try {
-            await rejectApplication(id, reason);
-            onSuccess?.();
-        } catch (e) {
-            console.error(e);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    return { mutate, isLoading };
-};
-
-export const usePendingProjectNightStudy = (onSuccess?: () => void) => {
-    const [isLoading, setIsLoading] = useState(false);
-
-    const mutate = async (id: string) => {
-        setIsLoading(true);
-        try {
-            await pendingApplication(id);
-            onSuccess?.();
-        } catch (e) {
-            console.error(e);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    return { mutate, isLoading };
 };

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Calendar } from '@b1nd/dodam-design-system/icons/mono';
 import './index.css';
 import type { ProjectNightStudyApplication } from '../../../../types/nightStudy';
@@ -6,8 +5,6 @@ import type { ProjectNightStudyApplication } from '../../../../types/nightStudy'
 interface Props {
     project: ProjectNightStudyApplication;
     onClose: () => void;
-    onApprove: () => void;
-    onReject: (reason: string) => void;
 }
 
 const formatDate = (dateStr: string) => {
@@ -23,15 +20,7 @@ const formatStudentId = (student: {
 }) =>
     `${student.grade}${student.room}${String(student.number).padStart(2, '0')}`;
 
-export const ProjectDetailDialog = ({
-    project,
-    onClose,
-    onApprove,
-    onReject,
-}: Props) => {
-    const [rejectReason, setRejectReason] = useState('');
-    const [showRejectInput, setShowRejectInput] = useState(false);
-
+export const ProjectDetailDialog = ({ project, onClose }: Props) => {
     const allMembers = [project.leader, ...project.members].filter(
         (member, index, members) => {
             const key = member.publicId ?? `${member.name}-${member.student
@@ -110,52 +99,6 @@ export const ProjectDetailDialog = ({
                         </li>
                     ))}
                 </ul>
-
-                {showRejectInput ? (
-                    <div className="project-dialog__reject-area">
-                        <input
-                            className="project-dialog__reject-input"
-                            type="text"
-                            placeholder="거절 사유를 입력하세요"
-                            value={rejectReason}
-                            onChange={(e) => setRejectReason(e.target.value)}
-                        />
-                        <div className="project-dialog__actions">
-                            <button
-                                type="button"
-                                className="project-dialog__btn project-dialog__btn--reject"
-                                onClick={() => setShowRejectInput(false)}
-                            >
-                                취소
-                            </button>
-                            <button
-                                type="button"
-                                className="project-dialog__btn project-dialog__btn--approve"
-                                onClick={() => onReject(rejectReason)}
-                                disabled={!rejectReason.trim()}
-                            >
-                                확인
-                            </button>
-                        </div>
-                    </div>
-                ) : (
-                    <div className="project-dialog__actions">
-                        <button
-                            type="button"
-                            className="project-dialog__btn project-dialog__btn--reject"
-                            onClick={() => setShowRejectInput(true)}
-                        >
-                            거절하기
-                        </button>
-                        <button
-                            type="button"
-                            className="project-dialog__btn project-dialog__btn--approve"
-                            onClick={onApprove}
-                        >
-                            승인하기
-                        </button>
-                    </div>
-                )}
             </div>
         </div>
     );

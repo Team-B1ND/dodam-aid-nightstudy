@@ -2,22 +2,14 @@ import { apiClient } from '../api/client.ts';
 import type { PageResponse } from '@b1nd/api-client';
 import type {
     NightStudyStatus,
-    NightStudyUser,
-    NightStudyRoom,
     PersonalNightStudyApplication,
 } from '../hooks/normalNightStudy.ts';
-import type {
-    ProjectNightStudyApplication,
-    NightStudyCount,
-} from '../hooks/projectNightStudy.ts';
+import type { ProjectNightStudyApplication } from '../hooks/projectNightStudy.ts';
 
 export type {
     NightStudyStatus,
-    NightStudyUser,
-    NightStudyRoom,
     PersonalNightStudyApplication,
     ProjectNightStudyApplication,
-    NightStudyCount,
 };
 
 // ──────────────────────────────
@@ -40,18 +32,6 @@ export const getPersonalApplications = (params: {
     );
 };
 
-/** 심자 승인 (PATCH /nightstudy/applications/{id}/allow) */
-export const allowApplication = (id: string) =>
-    apiClient.patch(`/nightstudy/applications/${id}/allow`);
-
-/** 심자 거절 (PATCH /nightstudy/applications/{id}/reject) */
-export const rejectApplication = (id: string, rejectionReason: string) =>
-    apiClient.patch(`/nightstudy/applications/${id}/reject`, { rejectionReason });
-
-/** 심자 대기(승인 취소) (PATCH /nightstudy/applications/{id}/pending) */
-export const pendingApplication = (id: string) =>
-    apiClient.patch(`/nightstudy/applications/${id}/pending`);
-
 // ──────────────────────────────
 // 프로젝트 심자
 // ──────────────────────────────
@@ -71,10 +51,6 @@ export const getProjectApplications = (params: {
         `/nightstudy/applications?${qs.toString()}`
     );
 };
-
-/** 심자 카운트 조회 (GET /nightstudy/applications/count) */
-export const getNightStudyCount = () =>
-    apiClient.get<NightStudyCount>('/nightstudy/applications/count');
 
 // ──────────────────────────────
 // 출석 체크

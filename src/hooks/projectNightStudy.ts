@@ -29,9 +29,3 @@ export interface ProjectNightStudyApplication {
     type: 'PROJECT';
     room: NightStudyRoom | null;
 }
-
-export interface NightStudyCount {
-    personal: { period1: number; period2: number };
-    project:  { period1: number; period2: number };
-    total:    { period1: number; period2: number };
-}
