@@ -1,10 +1,13 @@
 .normal-night-study {
+    flex: 1;
+    min-height: 0;
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
 
 .normal-night-study__summary {
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     gap: 12px;
@@ -27,14 +30,19 @@
     list-style: none;
     margin: 0;
     padding: 0;
+    flex: 1;
+    min-height: 0;
     display: flex;
     flex-direction: column;
     background-color: var(--dds-color-background-surface);
     border-radius: 16px;
-    overflow: hidden;
+    /* 목록만 스크롤한다 */
+    overflow: hidden auto;
+    overscroll-behavior: contain;
 }
 
 .normal-night-study__item {
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     gap: 14px;
@@ -64,6 +72,11 @@
 .normal-night-study__checkbox--checked {
     background-color: var(--dds-color-brand-primary);
     border-color: var(--dds-color-brand-primary);
+}
+
+.normal-night-study__checkbox:disabled {
+    cursor: default;
+    opacity: 0.4;
 }
 
 .normal-night-study__info {

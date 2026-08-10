@@ -22,7 +22,6 @@ export const ProjectNightStudy = ({
     gradeSelected,
     classSelected,
 }: Props) => {
-    const [selectedProjectIds, setSelectedProjectIds] = useState<string[]>([]);
     const [selectedProject, setSelectedProject] =
         useState<ProjectNightStudyApplication | null>(null);
 
@@ -32,12 +31,6 @@ export const ProjectNightStudy = ({
 
     const { mutate: allow } = useAllowProjectNightStudy(refetch);
     const { mutate: reject } = useRejectProjectNightStudy(refetch);
-
-    const toggleProject = (id: string) => {
-        setSelectedProjectIds((prev) =>
-            prev.includes(id) ? prev.filter((sid) => sid !== id) : [...prev, id]
-        );
-    };
 
     const handleApprove = (id: string) => {
         allow(id);
@@ -131,9 +124,6 @@ export const ProjectNightStudy = ({
                         </div>
                         <ul className="project-night-study__list">
                             {filteredProjects.map((project) => {
-                                const isChecked = selectedProjectIds.includes(
-                                    project.id
-                                );
                                 const isAllowed = project.status === 'ALLOWED';
 
                                 return (
@@ -141,37 +131,6 @@ export const ProjectNightStudy = ({
                                         key={project.id}
                                         className="project-night-study__item"
                                     >
-                                        <button
-                                            type="button"
-                                            className={`project-night-study__checkbox ${
-                                                isChecked
-                                                    ? 'project-night-study__checkbox--checked'
-                                                    : ''
-                                            }`}
-                                            onClick={() =>
-                                                toggleProject(project.id)
-                                            }
-                                            aria-checked={isChecked}
-                                            role="checkbox"
-                                        >
-                                            {isChecked && (
-                                                <svg
-                                                    width="14"
-                                                    height="11"
-                                                    viewBox="0 0 14 11"
-                                                    fill="none"
-                                                >
-                                                    <path
-                                                        d="M1 5L5.5 9.5L13 1"
-                                                        stroke="white"
-                                                        strokeWidth="2"
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
-                                                    />
-                                                </svg>
-                                            )}
-                                        </button>
-
                                         <button
                                             type="button"
                                             className="project-night-study__info"

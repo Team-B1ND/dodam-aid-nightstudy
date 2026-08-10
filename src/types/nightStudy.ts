@@ -75,3 +75,37 @@ export const getProjectApplications = (params: {
 /** 심자 카운트 조회 (GET /nightstudy/applications/count) */
 export const getNightStudyCount = () =>
     apiClient.get<NightStudyCount>('/nightstudy/applications/count');
+
+// ──────────────────────────────
+// 출석 체크
+// ──────────────────────────────
+
+export interface Attendance {
+    userId: string;
+    date: string;
+    period: number;
+    attended: boolean;
+}
+
+export interface AttendanceParams {
+    userId: string;
+    date?: string;
+    period: number;
+}
+
+const attendanceUrl = ({ userId, date, period }: AttendanceParams) => {
+    const qs = new URLSearchParams({ period: String(period) });
+    if (date) qs.set('date', date);
+    return `/nightstudy/attendance/${encodeURIComponent(userId)}?${qs.toString()}`;
+};
+
+/** 학생 1명의 출석 상태 조회 (GET /nightstudy/attendance/{userId}) */
+export const getAttendance = (params: AttendanceParams) =>
+    apiClient.get<Attendance>(attendanceUrl(params));
+
+/** 출석 확인 / 되돌리기 (PATCH /nightstudy/attendance/{userId}) */
+export const updateAttendance = (
+    params: AttendanceParams & { attended: boolean }
+) => apiClient.patch<Attendance>(attendanceUrl(params), {
+    attended: params.attended,
+});

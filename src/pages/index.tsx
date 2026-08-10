@@ -14,11 +14,14 @@ import {
 } from '../types/nightStudy';
 import { isForbiddenError } from '../api/error';
 import { NoPermission } from '../components/NoPermission';
+import { useNightStudyAttendance } from '../hooks/useNightStudyAttendance';
 
 import './index.css';
 
 const toNormalItem = (item: PersonalNightStudyApplication): NormalNightStudyItem => ({
     id: item.id,
+    userId: item.leader.publicId,
+    period: item.period,
     studentName: item.leader.name,
     classInfo: item.leader.student
         ? `${item.leader.student.grade}${item.leader.student.room}${String(item.leader.student.number).padStart(2, '0')}`
@@ -97,13 +100,11 @@ const NightStudyPage = () => {
         fetchAll();
     }, [activeType]);
 
-    const handleToggleCheck = (id: string) => {
-        setNormalItems((prev) =>
-            prev.map((i) => (i.id === id ? { ...i, checked: !i.checked } : i))
-        );
-    };
+    // 신청서의 period는 "심자 N까지"라는 뜻이라 출석은 교시별로 따로 기록된다.
+    // 심자2를 보고 있을 때만 2교시 출석을, 그 외에는 1교시 출석을 다룬다.
+    const attendancePeriod = timeSelected === '심자2' ? 2 : 1;
 
-    const filteredNormalItems = normalItems.filter((item) => {
+    const visibleNormalItems = normalItems.filter((item) => {
         const gradeNum = gradeSelected === '모든 학년' ? null : gradeSelected.replace('학년', '');
         const classNum = classRoomSelected === '모든 학반' ? null : classRoomSelected.replace('반', '');
         const timeFilter = timeSelected === '모든 시간' ? null : timeSelected;
@@ -115,6 +116,29 @@ const NightStudyPage = () => {
 
         return matchGrade && matchClass && matchTime && matchSearch;
     });
+
+    // 화면에 보이는 학생만 조회 대상으로 둬서 갱신 비용을 줄인다
+    const attendanceTargets = visibleNormalItems.map(({ userId }) => ({
+        userId,
+        period: attendancePeriod,
+    }));
+
+    const {
+        isAttended,
+        toggleAttendance,
+        isLoading: attendanceLoading,
+    } = useNightStudyAttendance(attendanceTargets);
+
+    const handleToggleCheck = (id: string) => {
+        const item = normalItems.find((i) => i.id === id);
+        if (!item) return;
+        void toggleAttendance(item.userId, attendancePeriod);
+    };
+
+    const filteredNormalItems = visibleNormalItems.map((item) => ({
+        ...item,
+        checked: isAttended(item.userId, attendancePeriod),
+    }));
 
     if (forbidden) {
         return (
@@ -198,6 +222,8 @@ const NightStudyPage = () => {
                     <NormalNightStudy
                         items={filteredNormalItems}
                         onToggleCheck={handleToggleCheck}
+                        isCheckDisabled={attendanceLoading}
+                        periodLabel={`심자${attendancePeriod}`}
                     />
                 )
             ) : (
