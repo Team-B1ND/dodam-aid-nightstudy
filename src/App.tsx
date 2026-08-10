@@ -1,10 +1,9 @@
-import { Component, type ReactNode } from "react";
+import { Component, useEffect, type ReactNode } from "react";
 import { BridgeProvider } from "@b1nd/aid-kit/bridge-kit/web";
 import { SafeAreaProvider } from "@b1nd/aid-kit/safe-area-provider";
 import { AppStateProvider, useAppState } from "@b1nd/aid-kit/app-state";
 import { RouteProvider, Router } from "@b1nd/aid-kit/navigation";
 import NightStudyPage from "./pages";
-import { useEffect } from "react";
 
 const routes = {
     tabs: [
@@ -13,18 +12,19 @@ const routes = {
     stacks: []
 };
 
-class ErrorBoundary extends Component
-{ children: ReactNode },
-{ error: Error | null }
-> {
-    state = { error: null as Error | null };
+type EBProps = { children: ReactNode };
+type EBState = { error: Error | null };
 
-static getDerivedStateFromError(error: Error) {
+class ErrorBoundary extends Component<EBProps, EBState> {
+    state: EBState = { error: null };
+
+    static getDerivedStateFromError(error: Error): EBState {
         return { error };
     }
 
     render() {
-        if (this.state.error) {
+        const { error } = this.state;
+        if (error) {
             return (
                 <pre
                     style={{
@@ -35,7 +35,7 @@ static getDerivedStateFromError(error: Error) {
                         wordBreak: "break-all",
                     }}
                 >
-                    {String(this.state.error?.stack ?? this.state.error?.message ?? this.state.error)}
+                    {String(error.stack ?? error.message ?? error)}
                 </pre>
             );
         }
