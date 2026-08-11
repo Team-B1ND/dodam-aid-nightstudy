@@ -93,21 +93,3 @@
     color: var(--dds-color-text-tertiary);
     font-size: 13px;
 }
-
-.normal-night-study__badge {
-    flex-shrink: 0;
-    padding: 6px 14px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 600;
-}
-
-.normal-night-study__badge--allowed {
-    background-color: var(--dds-color-brand-primary);
-    color: var(--dds-color-static-white);
-}
-
-.normal-night-study__badge--pending {
-    background-color: var(--dds-color-status-error);
-    color: var(--dds-color-static-white);
-}

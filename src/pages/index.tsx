@@ -26,7 +26,6 @@ const toNormalItem = (item: PersonalNightStudyApplication): NormalNightStudyItem
         ? `${item.leader.student.grade}${item.leader.student.room}${String(item.leader.student.number).padStart(2, '0')}`
         : '',
     time: item.period === 1 ? '심자1' : '심자2',
-    status: item.status === 'ALLOWED' ? 'ALLOWED' : 'PENDING',
     checked: false,
 });
 
@@ -78,15 +77,13 @@ const NightStudyPage = () => {
             setError(null);
             setForbidden(false);
             try {
-                const [pendingRes, allowedRes] = await Promise.all([
-                    getPersonalApplications({ page: 0, size: 100, status: 'PENDING' }),
-                    getPersonalApplications({ page: 0, size: 100, status: 'ALLOWED' }),
-                ]);
-                const merged = [
-                    ...allowedRes.data.content.map(toNormalItem),
-                    ...pendingRes.data.content.map(toNormalItem),
-                ];
-                setNormalItems(merged);
+                // 출석 대상은 승인된 신청만이라 ALLOWED만 가져온다
+                const res = await getPersonalApplications({
+                    page: 0,
+                    size: 100,
+                    status: 'ALLOWED',
+                });
+                setNormalItems(res.data.content.map(toNormalItem));
             } catch (e) {
                 if (isForbiddenError(e)) setForbidden(true);
                 else setError('심자 목록을 불러오지 못했어요.');

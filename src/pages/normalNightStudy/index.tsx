@@ -1,7 +1,5 @@
 import './index.css';
 
-export type NightStudyStatus = 'ALLOWED' | 'PENDING';
-
 export type NightStudyTime = '심자1' | '심자2';
 
 export interface NormalNightStudyItem {
@@ -10,7 +8,6 @@ export interface NormalNightStudyItem {
   studentName: string;
   classInfo: string;
   time: NightStudyTime;
-  status: NightStudyStatus;
   /** 오늘자 출석 여부 */
   checked: boolean;
 }
@@ -48,6 +45,14 @@ export const NormalNightStudy = ({
         <ul className="normal-night-study__list">
           {items.map((item) => (
               <li key={item.id} className="normal-night-study__item">
+                <div className="normal-night-study__info">
+                  {item.studentName}
+                  <span className="normal-night-study__dot">·</span>
+                  {item.classInfo}
+                  <span className="normal-night-study__dot">·</span>
+                  {item.time}까지
+                </div>
+
                 <button
                     type="button"
                     className={`normal-night-study__checkbox ${item.checked ? 'normal-night-study__checkbox--checked' : ''}`}
@@ -63,24 +68,6 @@ export const NormalNightStudy = ({
                       </svg>
                   )}
                 </button>
-
-                <div className="normal-night-study__info">
-                  {item.studentName}
-                  <span className="normal-night-study__dot">·</span>
-                  {item.classInfo}
-                  <span className="normal-night-study__dot">·</span>
-                  {item.time}까지
-                </div>
-
-                <span
-                    className={`normal-night-study__badge ${
-                        item.status === 'ALLOWED'
-                            ? 'normal-night-study__badge--allowed'
-                            : 'normal-night-study__badge--pending'
-                    }`}
-                >
-                  {item.status === 'ALLOWED' ? '승인' : '미승인'}
-                </span>
               </li>
           ))}
         </ul>
