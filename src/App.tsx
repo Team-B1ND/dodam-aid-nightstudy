@@ -4,6 +4,7 @@ import { SafeAreaProvider } from "@b1nd/aid-kit/safe-area-provider";
 import { AppStateProvider, useAppState } from "@b1nd/aid-kit/app-state";
 import { RouteProvider, Router } from "@b1nd/aid-kit/navigation";
 import NightStudyPage from "./pages";
+import { AccessTokenBridge } from "./components/AccessTokenBridge";
 
 const routes = {
     tabs: [
@@ -57,6 +58,7 @@ const App = () => (
             <SafeAreaProvider>
                 <AppStateProvider>
                     <ThemeApplier />
+                    <AccessTokenBridge />
                     <RouteProvider routes={routes}>
                         <Router routes={routes} />
                     </RouteProvider>

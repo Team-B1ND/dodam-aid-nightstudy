@@ -12,8 +12,9 @@ import {
     getPersonalApplications,
     type PersonalNightStudyApplication,
 } from '../types/nightStudy';
-import { isForbiddenError } from '../api/error';
-import { NoPermission } from '../components/NoPermission';
+import { getAuthFailure, type AuthFailure } from '../api/error';
+import { NoPermission, SessionExpired } from '../components/NoPermission';
+import { LoadingSpinner } from '../components/LoadingSpinner';
 import { useNightStudyAttendance } from '../hooks/useNightStudyAttendance';
 
 import './index.css';
@@ -44,7 +45,9 @@ const NightStudyPage = () => {
     const [normalItems, setNormalItems] = useState<NormalNightStudyItem[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [forbidden, setForbidden] = useState(false);
+    const [authFailure, setAuthFailure] = useState<AuthFailure | null>(null);
+    /** 다시 시도 버튼으로 목록 조회를 다시 돌리기 위한 값 */
+    const [reloadCount, setReloadCount] = useState(0);
 
     const grade = [
         { name: '모든 학년', value: '모든 학년' },
@@ -75,7 +78,7 @@ const NightStudyPage = () => {
         const fetchAll = async () => {
             setLoading(true);
             setError(null);
-            setForbidden(false);
+            setAuthFailure(null);
             try {
                 // 출석 대상은 승인된 신청만이라 ALLOWED만 가져온다
                 const res = await getPersonalApplications({
@@ -85,7 +88,8 @@ const NightStudyPage = () => {
                 });
                 setNormalItems(res.data.content.map(toNormalItem));
             } catch (e) {
-                if (isForbiddenError(e)) setForbidden(true);
+                const failure = getAuthFailure(e);
+                if (failure) setAuthFailure(failure);
                 else setError('심자 목록을 불러오지 못했어요.');
                 console.error(e);
             } finally {
@@ -94,7 +98,7 @@ const NightStudyPage = () => {
         };
 
         fetchAll();
-    }, [activeType]);
+    }, [activeType, reloadCount]);
 
     // 신청서의 period는 "심자 N까지"라는 뜻이라 출석은 교시별로 따로 기록된다.
     // 심자2를 보고 있을 때만 2교시 출석을, 그 외에는 1교시 출석을 다룬다.
@@ -136,10 +140,25 @@ const NightStudyPage = () => {
         checked: isAttended(item.userId, attendancePeriod),
     }));
 
-    if (forbidden) {
+    if (authFailure) {
         return (
-            <main className="night-study-page night-study-page--forbidden">
-                <NoPermission />
+            <main className="night-study-page night-study-page--centered">
+                {authFailure === 'forbidden' ? (
+                    <NoPermission />
+                ) : (
+                    <SessionExpired
+                        onRetry={() => setReloadCount((count) => count + 1)}
+                    />
+                )}
+            </main>
+        );
+    }
+
+    // 처음 들어오거나 새로고침한 직후에는 빈 화면에 로딩만 보여준다
+    if (loading && activeType === 'normal' && normalItems.length === 0) {
+        return (
+            <main className="night-study-page night-study-page--centered">
+                <LoadingSpinner />
             </main>
         );
     }
@@ -206,9 +225,7 @@ const NightStudyPage = () => {
 
             {activeType === 'normal' ? (
                 loading ? (
-                    <p style={{ color: 'var(--dds-color-text-tertiary)', fontSize: '14px' }}>
-                        불러오는 중...
-                    </p>
+                    <LoadingSpinner />
                 ) : error ? (
                     <p style={{ color: 'var(--dds-color-status-error)', fontSize: '14px' }}>
                         {error}

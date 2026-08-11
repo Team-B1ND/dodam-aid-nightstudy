@@ -1,0 +1,29 @@
+.loading-spinner {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 0;
+}
+
+.loading-spinner__circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 3px solid var(--dds-color-border-normal);
+    border-top-color: var(--dds-color-brand-primary);
+    animation: loading-spinner-rotate 0.8s linear infinite;
+}
+
+@keyframes loading-spinner-rotate {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .loading-spinner__circle {
+        animation-duration: 2.4s;
+    }
+}

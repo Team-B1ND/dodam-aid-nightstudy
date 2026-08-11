@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useGetProjectNightStudies } from '../../hooks/useProjectNightStudy';
 import type { ProjectNightStudyApplication } from '../../types/nightStudy';
 import { ProjectDetailDialog } from './components/ProjectDetailDialog/index.tsx';
-import { NoPermission } from '../../components/NoPermission';
+import { NoPermission, SessionExpired } from '../../components/NoPermission';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 import './index.css';
 
 const getPeriodText = (period: number) => (period === 2 ? '심자2' : '심자1');
@@ -21,7 +22,7 @@ export const ProjectNightStudy = ({
     const [selectedProject, setSelectedProject] =
         useState<ProjectNightStudyApplication | null>(null);
 
-    const { data, isLoading, error, isForbidden } =
+    const { data, isLoading, error, authFailure, refetch } =
         useGetProjectNightStudies();
     const projects = data?.content ?? [];
 
@@ -64,13 +65,17 @@ export const ProjectNightStudy = ({
                 className="project-night-study"
                 aria-label="프로젝트 심자 목록"
             >
-                <p className="project-night-study__empty">불러오는 중...</p>
+                <LoadingSpinner />
             </section>
         );
     }
 
-    if (isForbidden) {
-        return <NoPermission />;
+    if (authFailure) {
+        return authFailure === 'forbidden' ? (
+            <NoPermission />
+        ) : (
+            <SessionExpired onRetry={() => void refetch()} />
+        );
     }
 
     if (error) {

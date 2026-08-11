@@ -13,11 +13,12 @@
     background-color: var(--dds-color-background-default);
 }
 
-.night-study-page > *:not(.normal-night-study):not(.project-night-study):not(.no-permission) {
+.night-study-page
+    > *:not(.normal-night-study):not(.project-night-study):not(.no-permission):not(.loading-spinner) {
     flex-shrink: 0;
 }
 
-.night-study-page--forbidden {
+.night-study-page--centered {
     justify-content: center;
 }
 

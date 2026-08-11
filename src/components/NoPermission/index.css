@@ -13,6 +13,27 @@
     color: var(--dds-color-status-error);
 }
 
+.no-permission__icon--neutral {
+    color: var(--dds-color-text-tertiary);
+}
+
+.no-permission__retry {
+    margin-top: 4px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 12px;
+    background-color: var(--dds-color-brand-primary);
+    color: var(--dds-color-static-white);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+}
+
+.no-permission__retry:active {
+    opacity: 0.75;
+}
+
 .no-permission__text {
     display: flex;
     flex-direction: column;
