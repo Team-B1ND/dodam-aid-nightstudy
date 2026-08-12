@@ -180,6 +180,7 @@ export const useRoomAttendance = (period: number) => {
         authFailure,
         openRoom,
         setAttendance,
-        retry: () => void (openRoomId ? loadMembers(openRoomId) : loadRooms()),
+        // 당겨서 새로고침이 끝날 때까지 기다릴 수 있도록 Promise를 돌려준다
+        retry: () => (openRoomId ? loadMembers(openRoomId) : loadRooms()),
     };
 };

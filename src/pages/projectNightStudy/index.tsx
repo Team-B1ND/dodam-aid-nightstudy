@@ -4,6 +4,7 @@ import { useRouter } from '@b1nd/aid-kit/navigation';
 import { PageShell, CenteredScreen } from '../../components/PageShell';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { NoPermission, SessionExpired } from '../../components/NoPermission';
+import { PullToRefreshList } from '../../components/PullToRefreshList';
 import { useGetProjectNightStudies } from '../../hooks/useProjectNightStudy';
 import type { ProjectNightStudyApplication } from '../../types/nightStudy';
 import { PROJECT_DETAIL_PATH } from '../../routes';
@@ -132,7 +133,7 @@ export const ProjectNightStudyPage = () => {
                 ) : filtered.length === 0 ? (
                     <p className="night-study-list__empty">프로젝트가 없어요.</p>
                 ) : (
-                    <ul className="night-study-list__items">
+                    <PullToRefreshList onRefresh={refetch}>
                         {filtered.map((project) => {
                             const isAllowed = project.status === 'ALLOWED';
                             const isRejected = project.status === 'REJECTED';
@@ -169,7 +170,7 @@ export const ProjectNightStudyPage = () => {
                                 </li>
                             );
                         })}
-                    </ul>
+                    </PullToRefreshList>
                 )}
             </section>
         </PageShell>

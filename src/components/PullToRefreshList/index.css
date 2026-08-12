@@ -1,0 +1,24 @@
+.pull-refresh {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* 목록이 아래로 밀려나면서 드러나는 안내 문구 */
+.pull-refresh__hint {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    font-size: 13px;
+    color: var(--dds-color-text-tertiary);
+    pointer-events: none;
+}

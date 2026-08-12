@@ -5,6 +5,7 @@ import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { NoPermission, SessionExpired } from '../../components/NoPermission';
 import { StudentDialog } from './components/StudentDialog';
 import { RejectDialog } from '../../components/RejectDialog';
+import { PullToRefreshList } from '../../components/PullToRefreshList';
 import { useNormalNightStudy } from '../../hooks/useNormalNightStudy';
 import { useApplicationActions } from '../../hooks/useApplicationActions';
 import type { PersonalNightStudyApplication } from '../../types/nightStudy';
@@ -171,7 +172,7 @@ export const NormalNightStudyPage = () => {
                 ) : filtered.length === 0 ? (
                     <p className="night-study-list__empty">신청한 학생이 없어요.</p>
                 ) : (
-                    <ul className="night-study-list__items">
+                    <PullToRefreshList onRefresh={refetch}>
                         {filtered.map((application) => {
                             const isAllowed = application.status === 'ALLOWED';
                             const isRejected = application.status === 'REJECTED';
@@ -206,7 +207,7 @@ export const NormalNightStudyPage = () => {
                                 </li>
                             );
                         })}
-                    </ul>
+                    </PullToRefreshList>
                 )}
             </section>
 
