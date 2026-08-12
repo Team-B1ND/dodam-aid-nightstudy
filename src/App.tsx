@@ -3,14 +3,24 @@ import { BridgeProvider } from "@b1nd/aid-kit/bridge-kit/web";
 import { SafeAreaProvider } from "@b1nd/aid-kit/safe-area-provider";
 import { AppStateProvider, useAppState } from "@b1nd/aid-kit/app-state";
 import { RouteProvider, Router } from "@b1nd/aid-kit/navigation";
-import NightStudyPage from "./pages";
 import { AccessTokenBridge } from "./components/AccessTokenBridge";
+import { PROJECT_DETAIL_PATH, TAB_PATHS } from "./routes";
+import NormalNightStudyPage from "./pages/normalNightStudy";
+import ProjectNightStudyPage from "./pages/projectNightStudy";
+import ProjectDetailPage from "./pages/projectNightStudy/detail";
+import AttendanceCheckPage from "./pages/attendance";
+import MemberLookupPage from "./pages/members";
 
 const routes = {
     tabs: [
-        { path: "/", index: true, element: NightStudyPage }
+        { path: TAB_PATHS.normal, index: true, element: NormalNightStudyPage },
+        { path: TAB_PATHS.project, element: ProjectNightStudyPage },
+        { path: TAB_PATHS.members, element: MemberLookupPage },
+        { path: TAB_PATHS.attendance, element: AttendanceCheckPage },
     ],
-    stacks: []
+    stacks: [
+        { path: PROJECT_DETAIL_PATH, element: ProjectDetailPage },
+    ]
 };
 
 type EBProps = { children: ReactNode };
