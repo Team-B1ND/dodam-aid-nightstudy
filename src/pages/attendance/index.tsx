@@ -4,7 +4,9 @@ import { ArrowLeft } from '@b1nd/dodam-design-system/icons/mono';
 import { PageShell, CenteredScreen } from '../../components/PageShell';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { NoPermission, SessionExpired } from '../../components/NoPermission';
+import { PullToRefreshList } from '../../components/PullToRefreshList';
 import { useRoomAttendance } from '../../hooks/useRoomAttendance';
+import { getCurrentPeriodValue } from '../../utils/period';
 import './index.css';
 
 const PERIODS = [
@@ -13,7 +15,8 @@ const PERIODS = [
 ];
 
 export const AttendanceCheckPage = () => {
-    const [period, setPeriod] = useState('1');
+    // 탭에 들어온 시각에 맞는 교시로 시작한다 (직접 고르면 그 선택을 따른다)
+    const [period, setPeriod] = useState(getCurrentPeriodValue);
     const [searchTerm, setSearchTerm] = useState('');
 
     const {
@@ -77,7 +80,7 @@ export const AttendanceCheckPage = () => {
                             오늘 심자하는 학생이 없어요.
                         </p>
                     ) : (
-                        <ul className="night-study-list__items">
+                        <PullToRefreshList onRefresh={retry}>
                             {rooms.map((room) => (
                                 <li key={room.roomId}>
                                     <button
@@ -98,7 +101,7 @@ export const AttendanceCheckPage = () => {
                                     </button>
                                 </li>
                             ))}
-                        </ul>
+                        </PullToRefreshList>
                     )}
                 </section>
             </PageShell>
@@ -169,7 +172,7 @@ export const AttendanceCheckPage = () => {
                 ) : visibleMembers.length === 0 ? (
                     <p className="night-study-list__empty">학생을 찾을 수 없어요.</p>
                 ) : (
-                    <ul className="night-study-list__items">
+                    <PullToRefreshList onRefresh={retry}>
                         {visibleMembers.map((member) => (
                             <li key={member.userId}>
                                 <div className="night-study-list__item night-study-list__item--static">
@@ -198,7 +201,7 @@ export const AttendanceCheckPage = () => {
                                 </div>
                             </li>
                         ))}
-                    </ul>
+                    </PullToRefreshList>
                 )}
             </section>
         </PageShell>

@@ -3,8 +3,10 @@ import { Dropdown } from '@b1nd/dodam-design-system/components';
 import { PageShell, CenteredScreen } from '../../components/PageShell';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { NoPermission, SessionExpired } from '../../components/NoPermission';
+import { PullToRefreshList } from '../../components/PullToRefreshList';
 import { useNightStudyCounts } from '../../hooks/useNightStudyCounts';
 import type { PeriodCount } from '../../types/nightStudy';
+import { getCurrentPeriodValue } from '../../utils/period';
 
 const PERIODS = [
     { name: '심자 1', value: '1' },
@@ -15,7 +17,8 @@ const pickPeriod = (count: PeriodCount, period: string) =>
     period === '2' ? count.period2 : count.period1;
 
 export const MemberLookupPage = () => {
-    const [period, setPeriod] = useState('1');
+    // 탭에 들어온 시각에 맞는 교시로 시작한다 (직접 고르면 그 선택을 따른다)
+    const [period, setPeriod] = useState(getCurrentPeriodValue);
     const { counts, isLoading, error, authFailure, refetch } = useNightStudyCounts();
 
     if (authFailure) {
@@ -81,7 +84,7 @@ export const MemberLookupPage = () => {
                         승인된 심자 인원이 없어요.
                     </p>
                 ) : (
-                    <ul className="night-study-list__items">
+                    <PullToRefreshList onRefresh={refetch}>
                         {rows.map((row) => (
                             <li key={row.key}>
                                 <div className="night-study-list__item night-study-list__item--static">
@@ -95,7 +98,7 @@ export const MemberLookupPage = () => {
                                 </div>
                             </li>
                         ))}
-                    </ul>
+                    </PullToRefreshList>
                 )}
             </section>
         </PageShell>
