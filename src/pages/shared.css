@@ -1,0 +1,204 @@
+.night-study-page {
+    width: 100%;
+    /* 상단 메뉴와 탭바는 고정하고 목록만 스크롤되도록 화면 높이에 맞춘다 */
+    flex: 0 0 auto;
+    height: 100dvh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--dds-color-background-default);
+}
+
+.night-study-page__body {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: calc(env(safe-area-inset-top) + 20px) 16px 0;
+}
+
+.night-study-page__body > *:not(.night-study-list):not(.no-permission):not(.loading-spinner) {
+    flex-shrink: 0;
+}
+
+.night-study-page__body--centered {
+    justify-content: center;
+    padding-bottom: 20px;
+}
+
+.night-study-page__field-group {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.night-study-page__field-group--two {
+    display: flex;
+    gap: 8px;
+}
+
+.night-study-page__field-group > * {
+    min-width: 0;
+}
+
+.night-study-page__search {
+    display: flex;
+    flex-direction: column;
+}
+
+/* ── 일괄 처리 버튼 ── */
+
+.night-study-page__bulk {
+    display: flex;
+    gap: 8px;
+}
+
+.night-study-page__bulk-button {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 8px;
+    color: var(--dds-color-static-white);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+}
+
+.night-study-page__bulk-button:active {
+    opacity: 0.75;
+}
+
+.night-study-page__bulk-button:disabled {
+    opacity: 0.45;
+    cursor: default;
+}
+
+.night-study-page__bulk-button--allow {
+    background-color: var(--dds-color-brand-primary);
+}
+
+.night-study-page__bulk-button--danger {
+    background-color: var(--dds-color-status-error);
+}
+
+/* ── 목록 ── */
+
+.night-study-list {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.night-study-list__header {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--dds-color-text-primary);
+}
+
+.night-study-list__header span[aria-hidden='true'] {
+    color: var(--dds-color-text-tertiary);
+}
+
+.night-study-list__items {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--dds-color-background-surface);
+    border-radius: 16px;
+    overflow: hidden auto;
+    overscroll-behavior: contain;
+}
+
+.night-study-list__item {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 18px 16px;
+    border: none;
+    border-bottom: 1px solid var(--dds-color-border-subtle);
+    background: transparent;
+    text-align: left;
+    cursor: pointer;
+}
+
+.night-study-list__item:last-child {
+    border-bottom: none;
+}
+
+.night-study-list__item:active {
+    background-color: var(--dds-color-fill-hover, rgba(255, 255, 255, 0.04));
+}
+
+/* 행 자체는 누를 수 없고 안쪽 버튼만 동작하는 행 */
+.night-study-list__item--static,
+.night-study-list__item--static:active {
+    cursor: default;
+    background: transparent;
+}
+
+.night-study-list__info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--dds-color-text-primary);
+}
+
+.night-study-list__dot {
+    color: var(--dds-color-text-tertiary);
+    font-size: 13px;
+}
+
+.night-study-list__status {
+    flex-shrink: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--dds-color-text-tertiary);
+}
+
+.night-study-list__status--allowed {
+    color: var(--dds-color-status-success);
+}
+
+.night-study-list__status--rejected {
+    color: var(--dds-color-status-error);
+}
+
+.night-study-list__empty {
+    margin: 0;
+    padding: 40px 0;
+    text-align: center;
+    font-size: 14px;
+    color: var(--dds-color-text-tertiary);
+}
+
+.night-study-list__error {
+    margin: 0;
+    padding: 40px 0;
+    text-align: center;
+    font-size: 14px;
+    color: var(--dds-color-status-error);
+}
+
+@media (min-width: 768px) {
+    .night-study-page {
+        max-width: 480px;
+        margin: 0 auto;
+    }
+}

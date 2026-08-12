@@ -1,0 +1,110 @@
+.dialog__overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.dialog {
+    width: 100%;
+    max-width: 340px;
+    max-height: 80dvh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px;
+    border-radius: 18px;
+    background-color: var(--dds-color-background-surface);
+}
+
+.dialog__title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--dds-color-text-primary);
+}
+
+.dialog__rows {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.dialog__row {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--dds-color-text-secondary, var(--dds-color-text-tertiary));
+    word-break: break-word;
+}
+
+.dialog__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.dialog__action-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.dialog__button {
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--dds-color-static-white);
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+}
+
+.dialog__button:active {
+    opacity: 0.75;
+}
+
+.dialog__button:disabled {
+    opacity: 0.45;
+    cursor: default;
+}
+
+.dialog__button--allow {
+    background-color: var(--dds-color-brand-primary);
+}
+
+.dialog__button--danger {
+    background-color: var(--dds-color-status-error);
+}
+
+.dialog__button--neutral {
+    background-color: var(--dds-color-fill-primary, #2a2c2c);
+    color: var(--dds-color-text-primary);
+}
+
+.dialog__input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid var(--dds-color-border-normal);
+    border-radius: 12px;
+    background-color: var(--dds-color-background-default);
+    color: var(--dds-color-text-primary);
+    font-size: 15px;
+    outline: none;
+}
+
+.dialog__input::placeholder {
+    color: var(--dds-color-text-tertiary);
+}
+
+.dialog__error {
+    margin: 0;
+    font-size: 13px;
+    color: var(--dds-color-status-error);
+}
