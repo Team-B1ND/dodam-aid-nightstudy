@@ -6,6 +6,7 @@ import type {
 } from '../types/nightStudy';
 import type { PageResponse } from '@b1nd/api-client';
 import { getAuthFailure, type AuthFailure } from '../api/error';
+import { fetchAllPages } from '../api/paging';
 
 interface GetProjectParams {
     page?: number;
@@ -26,13 +27,15 @@ export const useGetProjectNightStudies = (params: GetProjectParams = {}) => {
         setError(null);
         setAuthFailure(null);
         try {
-            const res = await getProjectApplications({
-                page: params.page ?? 0,
-                size: params.size ?? 20,
-                keyword: params.keyword,
-                status: params.status,
-            });
-            setData(res.data);
+            const content = await fetchAllPages((page) =>
+                getProjectApplications({
+                    page: (params.page ?? 0) + page,
+                    size: params.size ?? 100,
+                    keyword: params.keyword,
+                    status: params.status,
+                })
+            );
+            setData({ content, hasNext: false });
         } catch (e) {
             const failure = getAuthFailure(e);
             if (failure) setAuthFailure(failure);

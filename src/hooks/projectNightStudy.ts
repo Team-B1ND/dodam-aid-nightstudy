@@ -27,5 +27,8 @@ export interface ProjectNightStudyApplication {
     leader: NightStudyUser;
     members: NightStudyUser[];
     type: 'PROJECT';
+    /** 배정된 자습 장소 */
     room: NightStudyRoom | null;
+    /** 신청할 때 학생이 적어낸 희망 장소 */
+    wishRoom: NightStudyRoom | null;
 }

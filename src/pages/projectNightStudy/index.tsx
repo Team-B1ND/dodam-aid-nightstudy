@@ -1,169 +1,179 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { Dropdown, TextField } from '@b1nd/dodam-design-system/components';
+import { useRouter } from '@b1nd/aid-kit/navigation';
+import { PageShell, CenteredScreen } from '../../components/PageShell';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
+import { NoPermission, SessionExpired } from '../../components/NoPermission';
 import { useGetProjectNightStudies } from '../../hooks/useProjectNightStudy';
 import type { ProjectNightStudyApplication } from '../../types/nightStudy';
-import { ProjectDetailDialog } from './components/ProjectDetailDialog/index.tsx';
-import { NoPermission, SessionExpired } from '../../components/NoPermission';
-import { LoadingSpinner } from '../../components/LoadingSpinner';
-import './index.css';
+import { PROJECT_DETAIL_PATH } from '../../routes';
+import { byStatusOrder } from '../../utils/status';
 
-const getPeriodText = (period: number) => (period === 2 ? '심자2' : '심자1');
+const GRADES = [
+    { name: '모든 학년', value: '모든 학년' },
+    { name: '1학년', value: '1학년' },
+    { name: '2학년', value: '2학년' },
+    { name: '3학년', value: '3학년' },
+];
 
-interface Props {
-    searchTerm: string;
-    gradeSelected: string;
-    classSelected: string;
-}
+const CLASS_ROOMS = [
+    { name: '모든 학반', value: '모든 학반' },
+    { name: '1반', value: '1반' },
+    { name: '2반', value: '2반' },
+    { name: '3반', value: '3반' },
+    { name: '4반', value: '4반' },
+];
 
-export const ProjectNightStudy = ({
-    searchTerm,
-    gradeSelected,
-    classSelected,
-}: Props) => {
-    const [selectedProject, setSelectedProject] =
-        useState<ProjectNightStudyApplication | null>(null);
+const getPeriodText = (period: number) => (period >= 2 ? '심2' : '심1');
 
+export const ProjectNightStudyPage = () => {
     const { data, isLoading, error, authFailure, refetch } =
         useGetProjectNightStudies();
+    const { stack } = useRouter();
+
+    const [gradeSelected, setGradeSelected] = useState('모든 학년');
+    const [classSelected, setClassSelected] = useState('모든 학반');
+    const [searchTerm, setSearchTerm] = useState('');
+
     const projects = data?.content ?? [];
+    const stackLength = stack.current.length;
 
-    const getProjectUsers = (project: ProjectNightStudyApplication) => [
-        project.leader,
-        ...project.members,
-    ];
-
-    const filteredProjects = projects.filter(
-        (project: ProjectNightStudyApplication) => {
-            const matchName = project.name
-                .toLowerCase()
-                .includes(searchTerm.trim().toLowerCase());
-            const users = getProjectUsers(project);
-            const selectedGrade =
-                gradeSelected === '모든 학년' ? null : Number(gradeSelected[0]);
-            const selectedClass =
-                classSelected === '모든 학반' ? null : Number(classSelected[0]);
-            const matchStudent =
-                selectedGrade === null && selectedClass === null
-                    ? true
-                    : users.some((user) => {
-                          if (!user.student) return false;
-                          const matchGrade =
-                              selectedGrade === null ||
-                              user.student.grade === selectedGrade;
-                          const matchClass =
-                              selectedClass === null ||
-                              user.student.room === selectedClass;
-                          return matchGrade && matchClass;
-                      });
-
-            return matchName && matchStudent;
-        }
-    );
-
-    if (isLoading) {
-        return (
-            <section
-                className="project-night-study"
-                aria-label="프로젝트 심자 목록"
-            >
-                <LoadingSpinner />
-            </section>
-        );
-    }
+    // 상세 페이지에서 승인/거절하고 돌아오면 목록을 새로 불러온다
+    useEffect(() => {
+        if (stackLength === 0) void refetch();
+    }, [stackLength, refetch]);
 
     if (authFailure) {
-        return authFailure === 'forbidden' ? (
-            <NoPermission />
-        ) : (
-            <SessionExpired onRetry={() => void refetch()} />
+        return (
+            <CenteredScreen>
+                {authFailure === 'forbidden' ? (
+                    <NoPermission />
+                ) : (
+                    <SessionExpired onRetry={() => void refetch()} />
+                )}
+            </CenteredScreen>
         );
     }
 
-    if (error) {
+    if (isLoading && projects.length === 0) {
         return (
-            <section
-                className="project-night-study"
-                aria-label="프로젝트 심자 목록"
-            >
-                <p className="project-night-study__error">{error}</p>
-            </section>
+            <CenteredScreen>
+                <LoadingSpinner />
+            </CenteredScreen>
         );
     }
+
+    const filtered = projects
+        .filter((project: ProjectNightStudyApplication) => {
+            const members = [project.leader, ...project.members];
+            const grade =
+                gradeSelected === '모든 학년' ? null : Number(gradeSelected[0]);
+            const classRoom =
+                classSelected === '모든 학반' ? null : Number(classSelected[0]);
+
+            const matchSearch = project.name
+                .toLowerCase()
+                .includes(searchTerm.trim().toLowerCase());
+
+            const matchStudent =
+                grade === null && classRoom === null
+                    ? true
+                    : members.some((member) => {
+                          if (!member.student) return false;
+                          return (
+                              (grade === null || member.student.grade === grade) &&
+                              (classRoom === null ||
+                                  member.student.room === classRoom)
+                          );
+                      });
+
+            return matchSearch && matchStudent;
+        })
+        .sort(byStatusOrder);
 
     return (
-        <>
-            <section
-                className="project-night-study"
-                aria-label="프로젝트 심자 목록"
-            >
-                {filteredProjects.length === 0 ? (
-                    <p className="project-night-study__empty">
-                        프로젝트가 없습니다.
-                    </p>
+        <PageShell>
+            <div className="night-study-page__field-group night-study-page__field-group--two">
+                <Dropdown
+                    items={GRADES}
+                    value={gradeSelected}
+                    onSelectedItemChange={(item) => setGradeSelected(item.value)}
+                    customStyle={{ height: '44px' }}
+                />
+                <Dropdown
+                    items={CLASS_ROOMS}
+                    value={classSelected}
+                    onSelectedItemChange={(item) => setClassSelected(item.value)}
+                    customStyle={{ height: '44px' }}
+                />
+            </div>
+
+            <div className="night-study-page__search">
+                <TextField
+                    type="text"
+                    label=""
+                    value={searchTerm}
+                    placeholder="프로젝트 검색"
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+            </div>
+
+            <section className="night-study-list" aria-label="프로젝트 심자 목록">
+                <div className="night-study-list__header">
+                    <span>프로젝트명</span>
+                    <span aria-hidden="true">·</span>
+                    <span>장소</span>
+                    <span aria-hidden="true">·</span>
+                    <span>진행 정보</span>
+                </div>
+
+                {error ? (
+                    <p className="night-study-list__error">{error}</p>
+                ) : filtered.length === 0 ? (
+                    <p className="night-study-list__empty">프로젝트가 없어요.</p>
                 ) : (
-                    <>
-                        <div className="project-night-study__header">
-                            <span>프로젝트명</span>
-                            <span aria-hidden="true">·</span>
-                            <span>장소</span>
-                            <span aria-hidden="true">·</span>
-                            <span>진행 정보</span>
-                            <span aria-hidden="true">·</span>
-                            <span>승인 상태</span>
-                        </div>
-                        <ul className="project-night-study__list">
-                            {filteredProjects.map((project) => {
-                                const isAllowed = project.status === 'ALLOWED';
+                    <ul className="night-study-list__items">
+                        {filtered.map((project) => {
+                            const isAllowed = project.status === 'ALLOWED';
+                            const isRejected = project.status === 'REJECTED';
 
-                                return (
-                                    <li
-                                        key={project.id}
-                                        className="project-night-study__item"
+                            return (
+                                <li key={project.id}>
+                                    <button
+                                        type="button"
+                                        className="night-study-list__item"
+                                        onClick={() =>
+                                            stack.push(PROJECT_DETAIL_PATH, { project })
+                                        }
                                     >
-                                        <button
-                                            type="button"
-                                            className="project-night-study__info"
-                                            onClick={() =>
-                                                setSelectedProject(project)
-                                            }
-                                        >
+                                        <span className="night-study-list__info">
                                             {project.name}
-                                            <span className="project-night-study__dot">
-                                                ·
-                                            </span>
+                                            <span className="night-study-list__dot">·</span>
                                             {project.room?.name ?? '장소 미정'}
-                                            <span className="project-night-study__dot">
-                                                ·
-                                            </span>
+                                            <span className="night-study-list__dot">·</span>
                                             {getPeriodText(project.period)}
-                                        </button>
+                                        </span>
 
-                                        <button
-                                            type="button"
-                                            className={`project-night-study__badge ${
+                                        <span
+                                            className={`night-study-list__status ${
                                                 isAllowed
-                                                    ? 'project-night-study__badge--allowed'
-                                                    : 'project-night-study__badge--pending'
+                                                    ? 'night-study-list__status--allowed'
+                                                    : isRejected
+                                                      ? 'night-study-list__status--rejected'
+                                                      : ''
                                             }`}
-                                            onClick={() =>
-                                                setSelectedProject(project)
-                                            }
                                         >
-                                            {isAllowed ? '승인' : '미승인'}
-                                        </button>
-                                    </li>
-                                );
-                            })}
-                        </ul>
-                    </>
+                                            {isAllowed ? '승인' : isRejected ? '거절' : '대기중'}
+                                        </span>
+                                    </button>
+                                </li>
+                            );
+                        })}
+                    </ul>
                 )}
             </section>
-
-            {selectedProject && (
-                <ProjectDetailDialog
-                    project={selectedProject}
-                    onClose={() => setSelectedProject(null)}
-                />
-            )}
-        </>
+        </PageShell>
     );
 };
+
+export default ProjectNightStudyPage;

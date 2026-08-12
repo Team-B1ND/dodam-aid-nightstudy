@@ -1,0 +1,45 @@
+.room-assign__caption {
+    font-size: 13px;
+    color: var(--dds-color-text-tertiary);
+}
+
+.room-assign__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.room-assign__room {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.room-assign__radio {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--dds-color-brand-primary);
+}
+
+.room-assign__text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.room-assign__name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--dds-color-text-primary);
+}
+
+.room-assign__hint {
+    font-size: 12px;
+    color: var(--dds-color-brand-primary);
+}
+
+.room-assign__hint--in-use {
+    color: var(--dds-color-text-tertiary);
+}
