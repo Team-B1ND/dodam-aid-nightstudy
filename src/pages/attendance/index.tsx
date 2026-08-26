@@ -8,6 +8,7 @@ import { PullToRefreshList } from '../../components/PullToRefreshList';
 import { useRoomAttendance } from '../../hooks/useRoomAttendance';
 import { getCurrentPeriodValue } from '../../utils/period';
 import './index.css';
+import { DROPDOWN_STYLE } from '../dropdownStyle';
 
 const PERIODS = [
     { name: '심자 1', value: '1' },
@@ -60,7 +61,7 @@ export const AttendanceCheckPage = () => {
                         items={PERIODS}
                         value={period}
                         onSelectedItemChange={(item) => setPeriod(item.value)}
-                        customStyle={{ height: '44px' }}
+                        customStyle={DROPDOWN_STYLE}
                     />
                 </div>
 

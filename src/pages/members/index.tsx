@@ -7,6 +7,7 @@ import { PullToRefreshList } from '../../components/PullToRefreshList';
 import { useNightStudyCounts } from '../../hooks/useNightStudyCounts';
 import type { PeriodCount } from '../../types/nightStudy';
 import { getCurrentPeriodValue } from '../../utils/period';
+import { DROPDOWN_STYLE } from '../dropdownStyle';
 
 const PERIODS = [
     { name: '심자 1', value: '1' },
@@ -64,7 +65,7 @@ export const MemberLookupPage = () => {
                     items={PERIODS}
                     value={period}
                     onSelectedItemChange={(item) => setPeriod(item.value)}
-                    customStyle={{ height: '44px' }}
+                    customStyle={DROPDOWN_STYLE}
                 />
             </div>
 

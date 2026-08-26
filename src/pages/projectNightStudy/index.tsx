@@ -9,6 +9,7 @@ import { useGetProjectNightStudies } from '../../hooks/useProjectNightStudy';
 import type { ProjectNightStudyApplication } from '../../types/nightStudy';
 import { PROJECT_DETAIL_PATH } from '../../routes';
 import { byStatusOrder } from '../../utils/status';
+import { DROPDOWN_STYLE } from '../dropdownStyle';
 
 const GRADES = [
     { name: '모든 학년', value: '모든 학년' },
@@ -99,13 +100,13 @@ export const ProjectNightStudyPage = () => {
                     items={GRADES}
                     value={gradeSelected}
                     onSelectedItemChange={(item) => setGradeSelected(item.value)}
-                    customStyle={{ height: '44px' }}
+                    customStyle={DROPDOWN_STYLE}
                 />
                 <Dropdown
                     items={CLASS_ROOMS}
                     value={classSelected}
                     onSelectedItemChange={(item) => setClassSelected(item.value)}
-                    customStyle={{ height: '44px' }}
+                    customStyle={DROPDOWN_STYLE}
                 />
             </div>
 
@@ -148,11 +149,17 @@ export const ProjectNightStudyPage = () => {
                                         }
                                     >
                                         <span className="night-study-list__info">
-                                            {project.name}
+                                            <span className="night-study-list__name">
+                                                {project.name}
+                                            </span>
                                             <span className="night-study-list__dot">·</span>
-                                            {project.room?.name ?? '장소 미정'}
+                                            <span className="night-study-list__meta">
+                                                {project.room?.name ?? '장소 미정'}
+                                            </span>
                                             <span className="night-study-list__dot">·</span>
-                                            {getPeriodText(project.period)}
+                                            <span className="night-study-list__meta">
+                                                {getPeriodText(project.period)}
+                                            </span>
                                         </span>
 
                                         <span

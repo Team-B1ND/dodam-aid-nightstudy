@@ -30,7 +30,7 @@
 .night-study-page__field-group {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 12px;
+    gap: 8px;
 }
 
 .night-study-page__field-group--two {
@@ -160,7 +160,21 @@
     color: var(--dds-color-text-primary);
 }
 
+/* 길어질 수 있는 앞쪽 항목만 줄이고 뒤따르는 정보는 한 줄에 그대로 둔다 */
+.night-study-list__name {
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.night-study-list__meta {
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
 .night-study-list__dot {
+    flex-shrink: 0;
     color: var(--dds-color-text-tertiary);
     font-size: 13px;
 }

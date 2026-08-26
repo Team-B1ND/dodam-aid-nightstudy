@@ -9,6 +9,7 @@ import { PullToRefreshList } from '../../components/PullToRefreshList';
 import { useNormalNightStudy } from '../../hooks/useNormalNightStudy';
 import { useApplicationActions } from '../../hooks/useApplicationActions';
 import type { PersonalNightStudyApplication } from '../../types/nightStudy';
+import { DROPDOWN_STYLE } from '../dropdownStyle';
 
 const GRADES = [
     { name: '모든 학년', value: '모든 학년' },
@@ -107,19 +108,19 @@ export const NormalNightStudyPage = () => {
                     items={GRADES}
                     value={gradeSelected}
                     onSelectedItemChange={(item) => setGradeSelected(item.value)}
-                    customStyle={{ height: '44px' }}
+                    customStyle={DROPDOWN_STYLE}
                 />
                 <Dropdown
                     items={CLASS_ROOMS}
                     value={classRoomSelected}
                     onSelectedItemChange={(item) => setClassRoomSelected(item.value)}
-                    customStyle={{ height: '44px' }}
+                    customStyle={DROPDOWN_STYLE}
                 />
                 <Dropdown
                     items={TIMES}
                     value={timeSelected}
                     onSelectedItemChange={(item) => setTimeSelected(item.value)}
-                    customStyle={{ height: '44px' }}
+                    customStyle={DROPDOWN_STYLE}
                 />
             </div>
 
