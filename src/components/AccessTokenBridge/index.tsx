@@ -1,11 +1,22 @@
 import { useEffect, useRef } from 'react';
-import { useBridgeProvider } from '@b1nd/aid-kit/bridge-kit/web';
+import { useBridgeProvider, type Action } from '@b1nd/aid-kit/bridge-kit/web';
 import { setAccessToken, setAccessTokenRequester } from '../../api/token';
 
 /** 앱이 응답하지 않을 때 무한정 기다리지 않도록 하는 제한 시간 */
 const TOKEN_REQUEST_TIMEOUT_MS = 5_000;
 
 type Resolve = (token: string | null) => void;
+
+/**
+ * aid-kit 1.0.10 에서 Actions 에서 빠진 액션이다("deprecated enum 삭제", 4/9).
+ * 도담 앱은 여전히 이 액션을 처리하고, 브리지는 액션 이름을 검증하지 않고
+ * 문자열 그대로 postMessage 로 넘기기 때문에 동작에는 문제가 없다.
+ * 타입에서만 사라져서 캐스팅으로 맞춘다.
+ *
+ * 라이브러리에서 되살아나면 이 상수를 지우고 Actions.OAUTH_GET_TOKEN 을 쓰면 된다.
+ * @see Team-B1ND/dodam-framework 커밋 24b54759 "hotfix: deprecated enum 삭제"
+ */
+const OAUTH_GET_TOKEN = 'OAUTH_GET_TOKEN' as Action;
 
 /**
  * 브리지 응답은 `{ id, type, success, data }` 봉투로 오고, SYNC로 밀린 응답은
@@ -34,7 +45,7 @@ export const AccessTokenBridge = () => {
     const resolveRef = useRef<Resolve | null>(null);
 
     useEffect(() => {
-        const unsubscribe = bridge.subscribe('OAUTH_GET_TOKEN', async (data) => {
+        const unsubscribe = bridge.subscribe(OAUTH_GET_TOKEN, async (data) => {
             const accessToken = extractAccessToken(data);
             if (accessToken) setAccessToken(accessToken);
             else console.error('브리지 토큰 응답을 해석하지 못했어요:', data);
@@ -60,7 +71,7 @@ export const AccessTokenBridge = () => {
                     );
 
                     resolveRef.current = finish;
-                    bridge.send('OAUTH_GET_TOKEN');
+                    bridge.send(OAUTH_GET_TOKEN);
                 })
         );
 
