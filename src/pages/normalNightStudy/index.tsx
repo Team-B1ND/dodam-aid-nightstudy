@@ -11,15 +11,20 @@ import { useApplicationActions } from '../../hooks/useApplicationActions';
 import type { PersonalNightStudyApplication } from '../../types/nightStudy';
 import { DROPDOWN_STYLE } from '../dropdownStyle';
 
+// 드롭다운 라벨이자 "거르지 않음"을 뜻하는 값 — 필터 조건과 반드시 같아야 한다
+const ALL_GRADES = '모든 학년';
+const ALL_CLASS_ROOMS = '모든 학반';
+const ALL_TIMES = '모든 심자';
+
 const GRADES = [
-    { name: '모든 학년', value: '모든 학년' },
+    { name: ALL_GRADES, value: ALL_GRADES },
     { name: '1학년', value: '1학년' },
     { name: '2학년', value: '2학년' },
     { name: '3학년', value: '3학년' },
 ];
 
 const CLASS_ROOMS = [
-    { name: '모든 학반', value: '모든 학반' },
+    { name: ALL_CLASS_ROOMS, value: ALL_CLASS_ROOMS },
     { name: '1반', value: '1반' },
     { name: '2반', value: '2반' },
     { name: '3반', value: '3반' },
@@ -27,7 +32,7 @@ const CLASS_ROOMS = [
 ];
 
 const TIMES = [
-    { name: '심자시간', value: '심자시간' },
+    { name: ALL_TIMES, value: ALL_TIMES },
     { name: '심1', value: '심1' },
     { name: '심2', value: '심2' },
 ];
@@ -44,9 +49,9 @@ export const NormalNightStudyPage = () => {
     const { applications, isLoading, error, authFailure, refetch } =
         useNormalNightStudy();
 
-    const [gradeSelected, setGradeSelected] = useState('모든 학년');
-    const [classRoomSelected, setClassRoomSelected] = useState('모든 학반');
-    const [timeSelected, setTimeSelected] = useState('심자시간');
+    const [gradeSelected, setGradeSelected] = useState(ALL_GRADES);
+    const [classRoomSelected, setClassRoomSelected] = useState(ALL_CLASS_ROOMS);
+    const [timeSelected, setTimeSelected] = useState(ALL_TIMES);
     const [searchTerm, setSearchTerm] = useState('');
     const [selected, setSelected] = useState<PersonalNightStudyApplication | null>(
         null
@@ -81,9 +86,10 @@ export const NormalNightStudyPage = () => {
 
     const filtered = applications.filter((application) => {
         const studentNumber = getStudentNumber(application);
-        const grade = gradeSelected === '모든 학년' ? null : gradeSelected[0];
-        const classRoom = classRoomSelected === '모든 학반' ? null : classRoomSelected[0];
-        const time = timeSelected === '심자시간' ? null : timeSelected;
+        const grade = gradeSelected === ALL_GRADES ? null : gradeSelected[0];
+        const classRoom =
+            classRoomSelected === ALL_CLASS_ROOMS ? null : classRoomSelected[0];
+        const time = timeSelected === ALL_TIMES ? null : timeSelected;
 
         const matchGrade = grade ? studentNumber[0] === grade : true;
         const matchClass = classRoom ? studentNumber[1] === classRoom : true;
