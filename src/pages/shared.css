@@ -27,6 +27,27 @@
     padding-bottom: 20px;
 }
 
+/* ── 상단 타이틀 ── */
+
+.night-study-page__title {
+    overflow: hidden;
+    /* 실제 높이보다 넉넉한 값 — 접을 때 애니메이션을 주려고 둔다 */
+    max-height: 80px;
+    opacity: 1;
+    transition:
+        max-height 0.2s ease,
+        opacity 0.2s ease,
+        margin-bottom 0.2s ease;
+}
+
+/* 목록을 내리면 타이틀을 접어서 목록을 더 길게 보여준다 */
+.night-study-page--scrolled .night-study-page__title {
+    max-height: 0;
+    opacity: 0;
+    /* body의 gap까지 같이 접는다 */
+    margin-bottom: -20px;
+}
+
 .night-study-page__field-group {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
