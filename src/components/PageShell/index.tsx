@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { TopNavBar } from '@b1nd/dodam-design-system/components';
+import { ArrowLeft } from '@b1nd/dodam-design-system/icons/mono';
 import { TabBar } from '../TabBar';
 import '../../pages/shared.css';
 
@@ -67,6 +68,49 @@ export const PageShell = ({ children }: { children: ReactNode }) => {
             </div>
 
             <TabBar />
+        </main>
+    );
+};
+
+/**
+ * 탭 위에 쌓이는 화면 뼈대 — 탭바 대신 뒤로 가기 버튼을 둔다.
+ * 하드웨어 뒤로 가기로 닫히도록 스택에 쌓아 쓴다.
+ */
+export const StackShell = ({
+    title,
+    onBack,
+    children,
+}: {
+    title: string;
+    onBack: () => void;
+    children: ReactNode;
+}) => {
+    const { rootRef, isScrolled } = useScrolledList();
+
+    return (
+        <main
+            ref={rootRef}
+            className={`night-study-page night-study-page--stack${
+                isScrolled ? ' night-study-page--scrolled' : ''
+            }`}
+        >
+            <div className="night-study-page__body">
+                <div className="night-study-page__title">
+                    <header className="night-study-page__back-header">
+                        <button
+                            type="button"
+                            className="night-study-page__back"
+                            aria-label="뒤로 가기"
+                            onClick={onBack}
+                        >
+                            <ArrowLeft size={24} color="currentColor" />
+                        </button>
+                        <h1 className="night-study-page__back-title">{title}</h1>
+                    </header>
+                </div>
+
+                {children}
+            </div>
         </main>
     );
 };

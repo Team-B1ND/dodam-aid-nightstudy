@@ -4,10 +4,11 @@ import { SafeAreaProvider } from "@b1nd/aid-kit/safe-area-provider";
 import { AppStateProvider } from "@b1nd/aid-kit/app-state";
 import { RouteProvider, Router } from "@b1nd/aid-kit/navigation";
 import { AccessTokenBridge } from "./components/AccessTokenBridge";
-import { PROJECT_DETAIL_PATH, TAB_PATHS } from "./routes";
+import { ATTENDANCE_ROOM_PATH, PROJECT_DETAIL_PATH, TAB_PATHS } from "./routes";
 import NormalNightStudyPage from "./pages/normalNightStudy";
 import ProjectNightStudyPage from "./pages/projectNightStudy";
 import ProjectDetailPage from "./pages/projectNightStudy/detail";
+import AttendanceRoomPage from "./pages/attendance/room";
 import AttendanceCheckPage from "./pages/attendance";
 import MemberLookupPage from "./pages/members";
 
@@ -20,6 +21,7 @@ const routes = {
     ],
     stacks: [
         { path: PROJECT_DETAIL_PATH, element: ProjectDetailPage },
+        { path: ATTENDANCE_ROOM_PATH, element: AttendanceRoomPage },
     ]
 };
 

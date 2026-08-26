@@ -6,5 +6,6 @@ export const TAB_PATHS = {
     attendance: '/attendance',
 } as const;
 
-/** 프로젝트 상세는 탭 위에 쌓이는 스택 화면 */
+/** 탭 위에 쌓이는 스택 화면 */
 export const PROJECT_DETAIL_PATH = '/project/detail';
+export const ATTENDANCE_ROOM_PATH = '/attendance/room';

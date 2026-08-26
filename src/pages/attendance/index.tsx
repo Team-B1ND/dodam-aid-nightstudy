@@ -1,12 +1,14 @@
-import { useState } from 'react';
-import { Dropdown, TextField } from '@b1nd/dodam-design-system/components';
-import { ArrowLeft } from '@b1nd/dodam-design-system/icons/mono';
+import { useEffect, useRef, useState } from 'react';
+import { Dropdown } from '@b1nd/dodam-design-system/components';
+import { useRouter } from '@b1nd/aid-kit/navigation';
 import { PageShell, CenteredScreen } from '../../components/PageShell';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { NoPermission, SessionExpired } from '../../components/NoPermission';
 import { PullToRefreshList } from '../../components/PullToRefreshList';
-import { useRoomAttendance } from '../../hooks/useRoomAttendance';
+import { useRoomList } from '../../hooks/useRoomAttendance';
 import { getCurrentPeriodValue } from '../../utils/period';
+import { ATTENDANCE_ROOM_PATH } from '../../routes';
+import type { AttendanceRoomState } from './room';
 import './index.css';
 import { DROPDOWN_STYLE } from '../dropdownStyle';
 
@@ -18,20 +20,21 @@ const PERIODS = [
 export const AttendanceCheckPage = () => {
     // 탭에 들어온 시각에 맞는 교시로 시작한다 (직접 고르면 그 선택을 따른다)
     const [period, setPeriod] = useState(getCurrentPeriodValue);
-    const [searchTerm, setSearchTerm] = useState('');
+    const { stack } = useRouter();
 
-    const {
-        rooms,
-        openRoomId,
-        members,
-        isLoading,
-        isSaving,
-        error,
-        authFailure,
-        openRoom,
-        setAttendance,
-        retry,
-    } = useRoomAttendance(Number(period));
+    const { rooms, isLoading, error, authFailure, retry } = useRoomList(
+        Number(period)
+    );
+
+    const stackLength = stack.current.length;
+    const previousStackLength = useRef(stackLength);
+
+    // 실에서 출석을 체크하고 돌아왔을 때만 현황을 새로 불러온다
+    useEffect(() => {
+        const returned = previousStackLength.current > 0 && stackLength === 0;
+        previousStackLength.current = stackLength;
+        if (returned) void retry();
+    }, [stackLength, retry]);
 
     if (authFailure) {
         return (
@@ -53,153 +56,61 @@ export const AttendanceCheckPage = () => {
         );
     }
 
-    if (!openRoomId) {
-        return (
-            <PageShell>
-                <div className="night-study-page__field-group night-study-page__field-group--two">
-                    <Dropdown
-                        items={PERIODS}
-                        value={period}
-                        onSelectedItemChange={(item) => setPeriod(item.value)}
-                        customStyle={DROPDOWN_STYLE}
-                    />
-                </div>
-
-                <section className="night-study-list" aria-label="실별 심자 현황">
-                    <div className="night-study-list__header">
-                        <span>실이름</span>
-                        <span aria-hidden="true">·</span>
-                        <span>심자 인원</span>
-                        <span aria-hidden="true">·</span>
-                        <span>미출석 인원</span>
-                    </div>
-
-                    {error ? (
-                        <p className="night-study-list__error">{error}</p>
-                    ) : rooms.length === 0 ? (
-                        <p className="night-study-list__empty">
-                            오늘 심자하는 학생이 없어요.
-                        </p>
-                    ) : (
-                        <PullToRefreshList onRefresh={retry}>
-                            {rooms.map((room) => (
-                                <li key={room.roomId}>
-                                    <button
-                                        type="button"
-                                        className="night-study-list__item"
-                                        onClick={() => {
-                                            openRoom(room.roomId);
-                                            setSearchTerm('');
-                                        }}
-                                    >
-                                        <span className="night-study-list__info">
-                                            {room.roomName}
-                                            <span className="night-study-list__dot">·</span>
-                                            {room.memberCount}명
-                                            <span className="night-study-list__dot">·</span>
-                                            {room.unchecked}명
-                                        </span>
-                                    </button>
-                                </li>
-                            ))}
-                        </PullToRefreshList>
-                    )}
-                </section>
-            </PageShell>
-        );
-    }
-
-    const openRoomName =
-        rooms.find((room) => room.roomId === openRoomId)?.roomName ?? '심자 인원';
-    const visibleMembers = members.filter((member) =>
-        searchTerm ? member.name.includes(searchTerm.trim()) : true
-    );
-    const uncheckedMembers = members.filter((member) => !member.attended);
-
     return (
         <PageShell>
-            <div className="attendance__room-header">
-                <button
-                    type="button"
-                    className="attendance__back"
-                    aria-label="실 목록으로"
-                    onClick={() => openRoom(null)}
-                >
-                    <ArrowLeft size={24} color="currentColor" />
-                </button>
-                <h2 className="attendance__room-name">{openRoomName}</h2>
-            </div>
-
-            <div className="night-study-page__search">
-                <TextField
-                    type="text"
-                    label=""
-                    value={searchTerm}
-                    placeholder="학생 검색"
-                    onChange={(e) => setSearchTerm(e.target.value)}
+            <div className="night-study-page__field-group night-study-page__field-group--two">
+                <Dropdown
+                    items={PERIODS}
+                    value={period}
+                    onSelectedItemChange={(item) => setPeriod(item.value)}
+                    customStyle={DROPDOWN_STYLE}
                 />
             </div>
 
-            <div className="night-study-page__bulk">
-                <button
-                    type="button"
-                    className="night-study-page__bulk-button night-study-page__bulk-button--allow"
-                    onClick={() => void setAttendance(uncheckedMembers, true)}
-                    disabled={isSaving || uncheckedMembers.length === 0}
-                >
-                    일괄 출석
-                </button>
-            </div>
-
-            <p className="attendance__summary">
-                심자 인원: {members.length}명
-                <span className="night-study-list__dot">·</span>
-                미출석 인원: {uncheckedMembers.length}명
-            </p>
-
-            {error && <p className="night-study-list__error">{error}</p>}
-
-            <section className="night-study-list" aria-label={`${openRoomName} 출석`}>
+            <section className="night-study-list" aria-label="실별 심자 현황">
                 <div className="night-study-list__header">
-                    <span>이름</span>
+                    <span>실이름</span>
                     <span aria-hidden="true">·</span>
-                    <span>학번</span>
+                    <span>심자 인원</span>
                     <span aria-hidden="true">·</span>
-                    <span>출석 여부</span>
+                    <span>미출석 인원</span>
                 </div>
 
-                {isLoading && members.length === 0 ? (
-                    <LoadingSpinner />
-                ) : visibleMembers.length === 0 ? (
-                    <p className="night-study-list__empty">학생을 찾을 수 없어요.</p>
+                {error ? (
+                    <p className="night-study-list__error">{error}</p>
+                ) : rooms.length === 0 ? (
+                    <p className="night-study-list__empty">
+                        오늘 심자하는 학생이 없어요.
+                    </p>
                 ) : (
                     <PullToRefreshList onRefresh={retry}>
-                        {visibleMembers.map((member) => (
-                            <li key={member.userId}>
-                                <div className="night-study-list__item night-study-list__item--static">
+                        {rooms.map((room) => (
+                            <li key={room.roomId}>
+                                <button
+                                    type="button"
+                                    className="night-study-list__item"
+                                    onClick={() =>
+                                        stack.push(ATTENDANCE_ROOM_PATH, {
+                                            roomId: room.roomId,
+                                            roomName: room.roomName,
+                                            period: Number(period),
+                                        } satisfies AttendanceRoomState)
+                                    }
+                                >
                                     <span className="night-study-list__info">
-                                        {member.name}
+                                        <span className="night-study-list__name">
+                                            {room.roomName}
+                                        </span>
                                         <span className="night-study-list__dot">·</span>
-                                        {member.grade}
-                                        {member.room}
-                                        {String(member.number).padStart(2, '0')}
+                                        <span className="night-study-list__meta">
+                                            {room.memberCount}명
+                                        </span>
+                                        <span className="night-study-list__dot">·</span>
+                                        <span className="night-study-list__meta">
+                                            {room.unchecked}명
+                                        </span>
                                     </span>
-
-                                    <button
-                                        type="button"
-                                        className={`attendance__button ${
-                                            member.attended
-                                                ? 'attendance__button--revert'
-                                                : ''
-                                        }`}
-                                        onClick={() =>
-                                            void setAttendance([member], !member.attended)
-                                        }
-                                        disabled={isSaving}
-                                    >
-                                        {member.attended ? '되돌리기' : '출석 확인'}
-                                    </button>
-                                </div>
+                                </button>
                             </li>
                         ))}
                     </PullToRefreshList>
