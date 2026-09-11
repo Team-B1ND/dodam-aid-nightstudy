@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Dropdown } from '@b1nd/dodam-design-system/components';
-import { PageShell, CenteredScreen } from '../../components/PageShell';
+import { PageShell } from '../../components/PageShell';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { NoPermission, SessionExpired } from '../../components/NoPermission';
 import { PullToRefreshList } from '../../components/PullToRefreshList';
@@ -24,21 +24,21 @@ export const MemberLookupPage = () => {
 
     if (authFailure) {
         return (
-            <CenteredScreen>
+            <PageShell centered>
                 {authFailure === 'forbidden' ? (
                     <NoPermission />
                 ) : (
                     <SessionExpired onRetry={() => void refetch()} />
                 )}
-            </CenteredScreen>
+            </PageShell>
         );
     }
 
     if (isLoading && !counts) {
         return (
-            <CenteredScreen>
+            <PageShell centered>
                 <LoadingSpinner />
-            </CenteredScreen>
+            </PageShell>
         );
     }
 

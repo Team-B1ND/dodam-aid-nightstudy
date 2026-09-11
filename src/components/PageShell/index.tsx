@@ -44,8 +44,19 @@ const useScrolledList = () => {
     return { rootRef, isScrolled };
 };
 
-/** 탭 화면 공통 뼈대 — 상단 타이틀, 가운데 내용, 하단 탭바 고정 */
-export const PageShell = ({ children }: { children: ReactNode }) => {
+/**
+ * 탭 화면 공통 뼈대 — 상단 타이틀, 가운데 내용, 페이지 위에 떠 있는 탭바.
+ *
+ * 로딩·권한 안내는 `centered`로 같은 뼈대 안에 그린다. 데이터가 와서 화면이 바뀌어도
+ * 탭바가 새로 생기지 않아야 탭을 옮길 때의 슬라이드가 끊기지 않는다.
+ */
+export const PageShell = ({
+    children,
+    centered = false,
+}: {
+    children: ReactNode;
+    centered?: boolean;
+}) => {
     const { rootRef, isScrolled } = useScrolledList();
 
     return (
@@ -55,14 +66,20 @@ export const PageShell = ({ children }: { children: ReactNode }) => {
                 isScrolled ? ' night-study-page--scrolled' : ''
             }`}
         >
-            <div className="night-study-page__body">
-                <div className="night-study-page__title">
-                    <TopNavBar
-                        customStyle={{ backgroundColor: 'transparent', padding: 0 }}
-                    >
-                        <TopNavBar.Title hasBackButton>심자 관리</TopNavBar.Title>
-                    </TopNavBar>
-                </div>
+            <div
+                className={`night-study-page__body${
+                    centered ? ' night-study-page__body--centered' : ''
+                }`}
+            >
+                {!centered && (
+                    <div className="night-study-page__title">
+                        <TopNavBar
+                            customStyle={{ backgroundColor: 'transparent', padding: 0 }}
+                        >
+                            <TopNavBar.Title hasBackButton>심자 관리</TopNavBar.Title>
+                        </TopNavBar>
+                    </div>
+                )}
 
                 {children}
             </div>

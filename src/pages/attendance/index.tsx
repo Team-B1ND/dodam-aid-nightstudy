@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Dropdown } from '@b1nd/dodam-design-system/components';
 import { useRouter } from '@b1nd/aid-kit/navigation';
-import { PageShell, CenteredScreen } from '../../components/PageShell';
+import { PageShell } from '../../components/PageShell';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { NoPermission, SessionExpired } from '../../components/NoPermission';
 import { PullToRefreshList } from '../../components/PullToRefreshList';
@@ -38,21 +38,21 @@ export const AttendanceCheckPage = () => {
 
     if (authFailure) {
         return (
-            <CenteredScreen>
+            <PageShell centered>
                 {authFailure === 'forbidden' ? (
                     <NoPermission />
                 ) : (
                     <SessionExpired onRetry={retry} />
                 )}
-            </CenteredScreen>
+            </PageShell>
         );
     }
 
     if (isLoading && rooms.length === 0) {
         return (
-            <CenteredScreen>
+            <PageShell centered>
                 <LoadingSpinner />
-            </CenteredScreen>
+            </PageShell>
         );
     }
 
