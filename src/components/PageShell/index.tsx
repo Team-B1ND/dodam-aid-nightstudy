@@ -51,7 +51,7 @@ export const PageShell = ({ children }: { children: ReactNode }) => {
     return (
         <main
             ref={rootRef}
-            className={`night-study-page${
+            className={`night-study-page night-study-page--tabs${
                 isScrolled ? ' night-study-page--scrolled' : ''
             }`}
         >
