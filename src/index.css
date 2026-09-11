@@ -30,6 +30,19 @@ html, body, #root {
 
 body { overflow-x: hidden; }
 
+/* 꾹 눌러도 글자가 선택되거나 iOS 복사 메뉴가 뜨지 않게 한다 */
+body {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* 입력칸까지 막으면 iOS에서 글자를 못 치므로 되살린다 */
+input, textarea {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
 *, *::before, *::after { box-sizing: border-box; }
 
 button, input, select, textarea { font: inherit; }
