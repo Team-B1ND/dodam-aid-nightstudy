@@ -93,26 +93,23 @@ export const assignRoom = (id: string, roomId: number) =>
 // 인원 조회
 // ──────────────────────────────
 
-export interface TypeCount {
-    /** 일반 심자 인원 */
-    personal: number;
-    /** 프로젝트 심자 인원 */
-    project: number;
+export interface GenderCount {
+    male: number;
+    female: number;
 }
 
-export interface PeriodCount {
-    /** 심자 1 (심자 2까지 신청한 인원도 포함) */
-    period1: TypeCount;
-    /** 심자 2 */
-    period2: TypeCount;
+export interface NightStudyTotalPeriod {
+    grades: (GenderCount & { grade: number })[];
+    floors: (GenderCount & { floor: number })[];
 }
 
-export interface NightStudyTotalCount {
-    floors: { floor: number; count: PeriodCount }[];
-    total: PeriodCount;
-}
 
-/** 승인된 심자의 층별 인원수 (GET /nightstudy/applications/total) */
+export type NightStudyTotalCount = Record<
+    'personal' | 'project',
+    Record<'period1' | 'period2', NightStudyTotalPeriod>
+>;
+
+/** 승인된 심자의 층·학년별 남녀 인원 (GET /nightstudy/applications/total) */
 export const getTotalCounts = () =>
     apiClient.get<NightStudyTotalCount>('/nightstudy/applications/total');
 

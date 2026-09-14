@@ -1,0 +1,9 @@
+.night-study-list__header.member-counts,
+.night-study-list__info.member-counts {
+    display: grid;
+    grid-template-columns: 1fr repeat(3, 56px);
+}
+
+.night-study-list__header.member-counts {
+    padding: 0 16px;
+}
